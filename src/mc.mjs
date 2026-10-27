@@ -11,7 +11,12 @@ export const POLLS = [
   { id: "kan",   seats: { yashar:22, likud:20, beyahad:14, democratim:8, meshutefet:9, shas:7, yahadut:8, tziyonut:7, otzma:8, beiteinu:8, raam:5, miluim:4 } },
   { id: "i24",   seats: { yashar:21, likud:26, beyahad:12, democratim:8, meshutefet:9, shas:8, yahadut:7, tziyonut:6, otzma:8, beiteinu:6, raam:5, winter:4 } },
   { id: "walla", seats: { yashar:23, likud:19, beyahad:14, democratim:9, meshutefet:8, shas:8, yahadut:7, tziyonut:6, otzma:8, beiteinu:8, raam:6, miluim:4 } },
+  // Maariv / Lazar Research 23.10 (verified via skarim.org + madad120): right 48, center 54, arab 14, reservists 4, winter below threshold
+  { id: "maariv", seats: { yashar:21, likud:19, beyahad:15, democratim:10, meshutefet:9, shas:8, yahadut:7, tziyonut:7, otzma:7, beiteinu:8, raam:5, miluim:4 } },
 ];
+// Pollster map (verified via TheMarker 11.6.25 + data24): ch14 = NEXT DATA (Shlomo Filber);
+// i24 = Direct Polls (Tzuriel Sharon) — Direct Polls LEFT ch14 in June 2025, so these are
+// TWO separate houses, both historically Likud-friendly. Not merged; documented instead.
 
 export const BLOCS = {
   right:  ["likud", "shas", "yahadut", "tziyonut", "otzma", "noam", "winter"],
@@ -28,7 +33,9 @@ export const SURPLUS_PAIRS = [
 ];
 
 // Judgment: assumed vote share for lists at/near the 3.25% threshold (polls show 0-4 seats).
-export const SUBTHRESHOLD_SHARES = { winter: 0.026, miluim: 0.028, noam: 0.018, haredi: 0.018 };
+// winter ~3.0% (Maariv: just below threshold; i24: 4 seats), miluim 3.3% (4 seats in 3/7 polls),
+// noam 0.5%, haredi 0.9% (per Maariv-reported vote shares; tagged judgment)
+export const SUBTHRESHOLD_SHARES = { winter: 0.030, miluim: 0.033, noam: 0.005, haredi: 0.009 };
 
 // Judgment matrix: fraction of each party's votes by sector (grounded in historical
 // voting patterns, NOT a live source). Rows are normalized in code.
@@ -103,14 +110,29 @@ function baderOfer(votes, pairs) {
   return seats;
 }
 
-export function runMc({ sectorDeltas = {}, sims = 100000, swingSd = 0.020, partySd = 0.06, doubleEnvelopeRightBoost = 1.008, polls = POLLS, rng = Math.random } = {}) {
-  // turnout multipliers per party (fixed across sims — they are the live-data update)
-  const turnoutMult = {};
+export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
+                        marginSdSeats = 3.0, partySd = 0.05, withinBlocRenorm = 0.5,
+                        turnoutDiscount = 0.5, turnoutShockSd = 0.3,
+                        sectorPopWeights = { general: 0.66, haredi: 0.14, arab: 0.11, judea_samaria: 0.07, christian: 0.01, druze: 0.01 },
+                        polls = POLLS, rng = Math.random } = {}) {
+  // Turnout update (Claude r2 #2): rescale sector deltas so their population-weighted mean
+  // matches the national delta (sector weights are judgment, ~2022 CEC composition), then
+  // discount by turnoutDiscount because final polls already priced a turnout surge
+  // (Maariv: 81% certain to vote vs ~71% in 2022 - verified). Per-draw shock below.
+  const d = { ...sectorDeltas };
+  if (nationalDelta != null) {
+    const wMean = Object.keys(sectorPopWeights).reduce((a, s) => a + (sectorPopWeights[s] || 0) * (d[s] || 0), 0);
+    const k = wMean !== 0 ? nationalDelta / wMean : 1;
+    for (const s in d) d[s] *= k;
+  }
+  for (const s in d) d[s] *= turnoutDiscount;
+  const baseMult = {};
   for (const p of PARTIES) {
     let m = 1;
-    for (const s in SECTOR_NORM[p]) if (sectorDeltas[s] != null) m += SECTOR_NORM[p][s] * sectorDeltas[s];
-    turnoutMult[p] = m;
+    for (const s in SECTOR_NORM[p]) if (d[s] != null) m += SECTOR_NORM[p][s] * d[s];
+    baseMult[p] = m;
   }
+
   const blocSum = (seats, bloc) => BLOCS[bloc].reduce((a, p) => a + seats[p], 0);
   let right61 = 0, center61 = 0, either = 0;
   let rightTotal = 0, centerTotal = 0, arabTotal = 0;
@@ -120,7 +142,6 @@ export function runMc({ sectorDeltas = {}, sims = 100000, swingSd = 0.020, party
 
   for (let sim = 0; sim < sims; sim++) {
     const poll = polls[(rng() * polls.length) | 0];
-    // seats -> vote shares
     const votes = {};
     let seatSum = 0;
     for (const p in poll.seats) seatSum += poll.seats[p];
@@ -129,13 +150,29 @@ export function runMc({ sectorDeltas = {}, sims = 100000, swingSd = 0.020, party
       if (poll.seats[p] != null && poll.seats[p] > 0) votes[p] = poll.seats[p] / seatSum;
       else votes[p] = st != null ? st : 0;
     }
-    // correlated bloc swing: +right / -center together
-    const swing = randn() * swingSd;
-    // per-party noise + swing + turnout + double-envelope
+    // turnout shock (uncertainty in the update itself)
+    const kappa = 1 + randn() * turnoutShockSd;
+    // correlated margin swing (Claude r2 #3): ~3 seats SD on the right-minus-center margin,
+    // replacing the too-tight 2% relative swing. Converted to multipliers on each bloc.
+    const rightSeats0 = BLOCS.right.reduce((a, p) => a + (poll.seats[p] || 0), 0);
+    const centerSeats0 = BLOCS.center.reduce((a, p) => a + (poll.seats[p] || 0), 0);
+    const shift = randn() * marginSdSeats;
+    const rightMult = Math.max(0.7, 1 + shift / Math.max(rightSeats0, 1));
+    const centerMult = Math.max(0.7, 1 - shift / Math.max(centerSeats0, 1));
+    // party noise with partial within-bloc renormalization (late consolidation within blocs)
+    const eps = {};
+    for (const p of PARTIES) eps[p] = randn() * partySd;
+    for (const bloc of ['right', 'center']) {
+      const ps = BLOCS[bloc];
+      let wsum = 0, esum = 0;
+      for (const p of ps) { wsum += votes[p]; esum += votes[p] * eps[p]; }
+      const m = wsum > 0 ? esum / wsum : 0;
+      for (const p of ps) eps[p] -= withinBlocRenorm * m;
+    }
     for (const p of PARTIES) {
-      let v = votes[p] * turnoutMult[p] * (1 + randn() * partySd);
-      if (BLOCS.right.includes(p)) v *= (1 + swing) * doubleEnvelopeRightBoost;
-      else if (BLOCS.center.includes(p)) v *= (1 - swing);
+      let v = votes[p] * (1 + (baseMult[p] - 1) * kappa) * (1 + eps[p]);
+      if (BLOCS.right.includes(p)) v *= rightMult;
+      else if (BLOCS.center.includes(p)) v *= centerMult;
       votes[p] = Math.max(v, 0);
     }
     const seats = baderOfer(votes, SURPLUS_PAIRS);
@@ -149,7 +186,7 @@ export function runMc({ sectorDeltas = {}, sims = 100000, swingSd = 0.020, party
     for (const p of PARTIES) seatsTotal[p] += seats[p];
     for (const p in passCount) if (seats[p] > 0) passCount[p]++;
   }
-  const hist = (m) => [...m.entries()].sort((x, y) => x[0] - y[0]).map(([s, n]) => ({ seats: s, p: +(n / sims).toFixed(4) }));
+  const hist = (m) => [...m.entries()].sort((x, y) => x[0] - y[0]).map(([st, n]) => ({ seats: st, p: +(n / sims).toFixed(4) }));
   return {
     sims,
     p_right_61: +(right61 / sims).toFixed(4),
@@ -159,6 +196,6 @@ export function runMc({ sectorDeltas = {}, sims = 100000, swingSd = 0.020, party
     party_exp_seats: Object.fromEntries(PARTIES.map(p => [p, +(seatsTotal[p] / sims).toFixed(1)])),
     threshold_pass: Object.fromEntries(Object.entries(passCount).map(([p, n]) => [p, +(n / sims).toFixed(3)])),
     right_hist: hist(rightHist), center_hist: hist(centerHist),
-    params: { swingSd, partySd, doubleEnvelopeRightBoost, sectorDeltas, turnoutMult: Object.fromEntries(PARTIES.map(p => [p, +turnoutMult[p].toFixed(3)])) },
+    params: { marginSdSeats, partySd, withinBlocRenorm, turnoutDiscount, turnoutShockSd, sectorDeltasRaw: sectorDeltas, sectorDeltasScaled: Object.fromEntries(Object.entries(d).map(([k, v]) => [k, +v.toFixed(4)])), nationalDelta, turnoutMult: Object.fromEntries(PARTIES.map(p => [p, +baseMult[p].toFixed(3)])) },
   };
 }

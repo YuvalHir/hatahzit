@@ -10,7 +10,9 @@ if (withSectors) {
   sectors = withSectors.sectors.map(s => ({ id: s.id, now: +(s.now*100).toFixed(1), est: +(s.est*100).toFixed(1), prev2022: +(s.prev*100).toFixed(1) }));
   for (const s of withSectors.sectors) sectorDeltas[s.id] = +(s.est / s.prev - 1).toFixed(4);
 }
+const latest = data.reports[data.reports.length - 1];
+const nationalDelta = +(latest.national.est / latest.national.prev - 1).toFixed(4);
 const t0 = Date.now();
-const mc = runMc({ sectorDeltas, sims: 100000 });
+const mc = runMc({ sectorDeltas, nationalDelta, sims: 100000 });
 console.error('sim time ms:', Date.now() - t0);
 console.log(JSON.stringify({ updated_at: new Date().toISOString(), sectorsAt: withSectors ? withSectors.at : null, sectors, mc }, null, 0));
