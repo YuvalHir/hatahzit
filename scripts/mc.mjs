@@ -12,7 +12,12 @@ if (withSectors) {
 }
 const latest = data.reports[data.reports.length - 1];
 const nationalDelta = +(latest.national.est / latest.national.prev - 1).toFixed(4);
+// Gemini r3 #3: intraday pacing deltas firm up toward EOD. Discount ramps 0.50 -> 0.85
+// between 07:00 and 19:00 IST (polls already priced the surge; early-day ratios are noisy).
+const istMins = (Date.now() / 60000 + 120) % 1440; // UTC+2 (IST, winter time)
+const progress = Math.max(0, Math.min(1, (istMins - 7 * 60) / (12 * 60)));
+const turnoutDiscount = Math.min(0.85, 0.5 + 0.35 * progress);
 const t0 = Date.now();
-const mc = runMc({ sectorDeltas, nationalDelta, sims: 100000 });
+const mc = runMc({ sectorDeltas, nationalDelta, sims: 100000, turnoutDiscount });
 console.error('sim time ms:', Date.now() - t0);
 console.log(JSON.stringify({ updated_at: new Date().toISOString(), sectorsAt: withSectors ? withSectors.at : null, sectors, mc }, null, 0));

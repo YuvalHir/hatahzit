@@ -1,8 +1,11 @@
 // התחזית × כנסת 26 — seat-level Monte Carlo (documented in MODEL.md)
 // Prior: 6 final TV polls (seats -> vote shares). Update: live CEC sectoral turnout
 // deltas applied mechanically via a judgment sector->party matrix, then renormalized.
-// Noise: bloc-level correlated swing + party-level noise. 3.25% threshold, Bader-Ofer
-// with the verified 2026 surplus agreements, double-envelope right shift (judgment).
+// Noise: bloc-level correlated swing + party noise with additive sampling-error floor
+// (Gemini r3: multiplicative-only noise kills sub-threshold parties). 3.25% threshold,
+// Bader-Ofer with verified 2026 surplus agreements. Double envelopes: NOT modelled -
+// the prior is polls, which already include soldiers (Claude r2); Gemini's party-specific
+// multipliers are calibrated to exit-poll-vs-final gaps, a different prior. Unverified, dropped.
 
 export const POLLS = [
   { id: "ch12",  seats: { yashar:23, likud:21, beyahad:15, democratim:10, meshutefet:9, shas:8, yahadut:7, tziyonut:6, otzma:8, beiteinu:8, raam:5 } },
@@ -111,7 +114,8 @@ function baderOfer(votes, pairs) {
 }
 
 export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
-                        marginSdSeats = 3.0, partySd = 0.05, withinBlocRenorm = 0.5,
+                        marginSdSeats = 3.0, partyFloorSd = 0.0075, partyRelSd = 0.06,
+                        withinBlocRenorm = 0.5,
                         turnoutDiscount = 0.5, turnoutShockSd = 0.3,
                         sectorPopWeights = { general: 0.66, haredi: 0.14, arab: 0.11, judea_samaria: 0.07, christian: 0.01, druze: 0.01 },
                         polls = POLLS, rng = Math.random } = {}) {
@@ -143,12 +147,19 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
   for (let sim = 0; sim < sims; sim++) {
     const poll = polls[(rng() * polls.length) | 0];
     const votes = {};
-    let seatSum = 0;
-    for (const p in poll.seats) seatSum += poll.seats[p];
+    // Gemini r3 #2 (verified real bug): shares must be consistent so a party the poll
+    // gave seats starts ABOVE the 3.25% threshold. Seat share = valid-vote share among
+    // passing lists; invert with the Bader-Ofer midpoint (+0.5 seat) and deflate by the
+    // wasted share of lists the poll did NOT seat. Passing shares sum to (1 - wasted).
+    let seatSum = 0, npass = 0, wasted = 0;
     for (const p of PARTIES) {
-      const st = SUBTHRESHOLD_SHARES[p];
-      if (poll.seats[p] != null && poll.seats[p] > 0) votes[p] = poll.seats[p] / seatSum;
-      else votes[p] = st != null ? st : 0;
+      if (poll.seats[p] != null && poll.seats[p] > 0) { seatSum += poll.seats[p]; npass++; }
+      else wasted += SUBTHRESHOLD_SHARES[p] != null ? SUBTHRESHOLD_SHARES[p] : 0;
+    }
+    const cSeat = (1 - wasted) / (seatSum + 0.5 * npass);
+    for (const p of PARTIES) {
+      if (poll.seats[p] != null && poll.seats[p] > 0) votes[p] = (poll.seats[p] + 0.5) * cSeat;
+      else votes[p] = SUBTHRESHOLD_SHARES[p] != null ? SUBTHRESHOLD_SHARES[p] : 0;
     }
     // turnout shock (uncertainty in the update itself)
     const kappa = 1 + randn() * turnoutShockSd;
@@ -159,9 +170,12 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
     const shift = randn() * marginSdSeats;
     const rightMult = Math.max(0.7, 1 + shift / Math.max(rightSeats0, 1));
     const centerMult = Math.max(0.7, 1 - shift / Math.max(centerSeats0, 1));
-    // party noise with partial within-bloc renormalization (late consolidation within blocs)
+    // party noise, ADDITIVE in share units with a sampling-error floor (Gemini r3 #1,
+    // mechanically right): sigma_p = sqrt(floor^2 + (rel * v)^2). A 3% party gets
+    // sigma ~0.77pp (one poll's sampling error), so sub-threshold lists stay alive.
+    // Partial within-bloc renormalization = late consolidation (rho ~ -0.35, Gemini #6).
     const eps = {};
-    for (const p of PARTIES) eps[p] = randn() * partySd;
+    for (const p of PARTIES) eps[p] = randn() * Math.sqrt(partyFloorSd * partyFloorSd + (partyRelSd * votes[p]) ** 2);
     for (const bloc of ['right', 'center']) {
       const ps = BLOCS[bloc];
       let wsum = 0, esum = 0;
@@ -170,10 +184,10 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
       for (const p of ps) eps[p] -= withinBlocRenorm * m;
     }
     for (const p of PARTIES) {
-      let v = votes[p] * (1 + (baseMult[p] - 1) * kappa) * (1 + eps[p]);
+      let v = votes[p] * (1 + (baseMult[p] - 1) * kappa);
       if (BLOCS.right.includes(p)) v *= rightMult;
       else if (BLOCS.center.includes(p)) v *= centerMult;
-      votes[p] = Math.max(v, 0);
+      votes[p] = Math.max(v + eps[p], 0);
     }
     const seats = baderOfer(votes, SURPLUS_PAIRS);
     const r = blocSum(seats, 'right'), c = blocSum(seats, 'center'), a = blocSum(seats, 'arab');
@@ -196,6 +210,6 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
     party_exp_seats: Object.fromEntries(PARTIES.map(p => [p, +(seatsTotal[p] / sims).toFixed(1)])),
     threshold_pass: Object.fromEntries(Object.entries(passCount).map(([p, n]) => [p, +(n / sims).toFixed(3)])),
     right_hist: hist(rightHist), center_hist: hist(centerHist),
-    params: { marginSdSeats, partySd, withinBlocRenorm, turnoutDiscount, turnoutShockSd, sectorDeltasRaw: sectorDeltas, sectorDeltasScaled: Object.fromEntries(Object.entries(d).map(([k, v]) => [k, +v.toFixed(4)])), nationalDelta, turnoutMult: Object.fromEntries(PARTIES.map(p => [p, +baseMult[p].toFixed(3)])) },
+    params: { marginSdSeats, partyFloorSd, partyRelSd, withinBlocRenorm, turnoutDiscount, turnoutShockSd, sectorDeltasRaw: sectorDeltas, sectorDeltasScaled: Object.fromEntries(Object.entries(d).map(([k, v]) => [k, +v.toFixed(4)])), nationalDelta, turnoutMult: Object.fromEntries(PARTIES.map(p => [p, +baseMult[p].toFixed(3)])) },
   };
 }
