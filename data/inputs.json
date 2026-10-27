@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-10-27T15:20:00+03:00",
+  "embargo": "pre-22:00 data only; exit polls/results forbidden before polls close",
+  "headline": {
+    "question": "האם אחד הגושים מגיע ל-61+ מנדטים?",
+    "p_any_bloc_61_plus": 0.09,
+    "p_right_bloc_61_plus": 0.04,
+    "p_center_bloc_61_plus": 0.05,
+    "uncertainty_range": [0.04, 0.16],
+    "verdict": "ככל הנראה לא"
+  },
+  "blocs": {
+    "right": {"parties": ["likud", "shas", "yahadut", "tziyonut", "otzma"], "poll_avg": 52.5, "poll_range": [48, 62]},
+    "center": {"parties": ["yashar", "beyahad", "democratim", "beiteinu"], "poll_avg": 51.2, "poll_range": [44, 56]},
+    "arab": {"parties": ["meshutefet", "raam"], "poll_avg": 14.3, "poll_range": [14, 16]}
+  },
+  "parameters": [
+    {"id": "polls", "weight": 0.30, "estimate": 0.10, "estimate_type": "judgment",
+     "summary": "6 polls 20-23.10: right 48-62 (avg 52.5), center 44-56 (avg 51.2); only ch14 gives any bloc 61+"},
+    {"id": "coalition_majority_market", "weight": 0.22, "estimate": 0.075, "estimate_type": "data",
+     "summary": "Polymarket 'any coalition majority' 7.5% (from 11.5% morning); hung parliament 34%; thin market"},
+    {"id": "pm_winner_markets", "weight": 0.13, "estimate": 0.12, "estimate_type": "judgment",
+     "summary": "Eizenkot 64.6 vs Netanyahu 22.5; Yashar 75.5 largest party; ~$3.5M 24h volume"},
+    {"id": "turnout_sector", "weight": 0.20, "estimate": 0.07, "estimate_type": "judgment",
+     "summary": "National 44.9% at 14:00 (record since 1973), EOD est 76.9%; center-left strongholds +11.6 vs 2022, Haredi -4.7; sector data from 11:58-12:29 ballot reports"},
+    {"id": "complementary", "weight": 0.15, "estimate": 0.10, "estimate_type": "neutral",
+     "summary": "Kalshi converged with Polymarket (no divergence); Google Trends routine; TASE closed; USD/ILS 3.078"}
+  ],
+  "polls": [
+    {"outlet": "חדשות 12", "date": "2026-10-23", "right": 50, "center": 56, "arab": 14, "other": 0, "src": "https://www.mako.co.il/news-israel-elections/2026/Article-8ea5e45ec2961a1027.htm"},
+    {"outlet": "חדשות 13", "date": "2026-10-23", "right": 50, "center": 54, "arab": 16, "other": 0, "src": "https://13tv.co.il/item/news/politics/politics/survey-905415900/"},
+    {"outlet": "ערוץ 14", "date": "2026-10-22", "right": 62, "center": 44, "arab": 14, "other": 0, "src": "https://www.c14.co.il/article/1750553", "outlier": true},
+    {"outlet": "כאן 11", "date": "2026-10-23", "right": 50, "center": 52, "arab": 14, "other": 4, "src": "https://www.kan.org.il/content/kan-news/politic/1112122/"},
+    {"outlet": "i24NEWS", "date": "2026-10-23", "right": 55, "center": 47, "arab": 14, "other": 4, "src": "https://www.i24news.tv/he/news/israel-elections-2026/polls/artc-07d162ea"},
+    {"outlet": "וואלה", "date": "2026-10-20", "right": 48, "center": 54, "arab": 14, "other": 4, "src": "https://www.walla.co.il/news/politics/383958175"}
+  ],
+  "turnout": {
+    "national": [{"time": "10:00", "pct": 16.68}, {"time": "12:00", "pct": 31.5}, {"time": "14:00", "pct": 44.9}],
+    "y2022_same_hours": {"12:00": 28.4, "14:00": 38.9},
+    "eod_estimate": 76.9, "eod_range": [72.9, 81.0], "y2022_final": 70.6,
+    "sectors_eod_forecast_vs_2022": {
+      "מעוזי מרכז-שמאל": {"eod": 81.6, "delta": 11.6}, "חילונים": {"eod": 72.6, "delta": 7.9},
+      "בדואים בנגב": {"eod": 76.7, "delta": 10.7}, "ערבים": {"eod": 58.5, "delta": 5.7},
+      "יהודה ושומרון": {"eod": 78.3, "delta": 5.4}, "דתיים-לאומיים": {"eod": 79.6, "delta": 4.7},
+      "מעוזי ימין": {"eod": 71.4, "delta": 1.8}, "חרדים": {"eod": 68.7, "delta": -4.7},
+      "דרוזים": {"eod": 39.9, "delta": -4.0}, "יוצאי ברה\"מ": {"eod": 62.5, "delta": 4.6}
+    },
+    "sector_source": "https://votes26.com/?v=turnout (ballot reports 11:58-12:29)"
+  },
+  "market_timeline": [
+    {"t": "11:24", "eizenkot": 54.9, "netanyahu": 27.5, "bennett": 9.5, "coalition_majority": 11.5, "hung": 37},
+    {"t": "12:44", "eizenkot": 61.2, "netanyahu": 28.5, "bennett": 6.0},
+    {"t": "12:59", "eizenkot": 64.2, "netanyahu": 27.5, "bennett": 5.5, "coalition_majority": 7.5, "hung": 33.5},
+    {"t": "13:15", "eizenkot": 60.2, "netanyahu": 27.5, "bennett": 8.5},
+    {"t": "13:45", "eizenkot": 60.4, "netanyahu": 27.5, "bennett": 7.5, "note": "~$50k one-sided anti-Netanyahu burst, 4 wallets"},
+    {"t": "14:16", "eizenkot": 62.4, "netanyahu": 26.5, "bennett": 7.5},
+    {"t": "14:47", "eizenkot": 64.1, "netanyahu": 24.5, "bennett": 7.0, "yashar": 74.5},
+    {"t": "15:06", "eizenkot": 64.6, "netanyahu": 22.5, "bennett": 6.5, "yashar": 75.5, "kalshi": {"eizenkot": 57, "netanyahu": 22, "no_one": 17}}
+  ],
+  "legal": {
+    "not_a_poll": "סעיף 16ה(ד) חוק הבחירות (דרכי תעמולה) תשי\"ט-1959",
+    "outdated_polls_marking": "סעיף 16ה(ח)",
+    "cec_betting_data_guidance": "https://www.israelhayom.co.il/news/law/article/21667242"
+  }
+}
