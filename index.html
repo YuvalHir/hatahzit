@@ -58,6 +58,7 @@ h1.q em{font-style:normal;background:linear-gradient(90deg,var(--gold),#ff9d5c);
 .flash-stage{position:relative;min-height:28px}
 .flash{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;line-height:1.35;text-align:center;white-space:nowrap;overflow:hidden;position:absolute;inset:0;opacity:0;transform:translateX(-16px);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
 .flash.on{position:relative;opacity:1;transform:none;pointer-events:auto}
+.flash.off{transform:translateX(16px)}
 .flash>span{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .flash .ar{font-weight:900;flex:none}
 .flash.up .ar{color:var(--center)} .flash.down .ar{color:var(--bad)} .flash.flat .ar{color:var(--faint)}
@@ -460,7 +461,7 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
     var st=document.getElementById('flashStage'); if(!st)return;
     var kids=st.children; if(!kids.length)return;
     FLIX=((i%kids.length)+kids.length)%kids.length;
-    for(var j=0;j<kids.length;j++)kids[j].classList.toggle('on',j===FLIX);
+    for(var j=0;j<kids.length;j++){var was=kids[j].classList.contains('on');kids[j].classList.toggle('off',was&&j!==FLIX);kids[j].classList.toggle('on',j===FLIX);}
     var dt=document.getElementById('flashDots');
     if(dt){var ds=dt.querySelectorAll('i'); for(var j=0;j<ds.length;j++)ds[j].classList.toggle('on',j===FLIX);
       var c=dt.querySelector('.cnt'); if(c)c.textContent=(FLIX+1)+'/'+kids.length;}
