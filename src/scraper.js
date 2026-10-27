@@ -117,5 +117,35 @@ export async function scrape(prev = {}) {
     hungParliament: hungRow ? hungRow.price : null,
     note: 'markets are a sanity benchmark only; the headline comes from the seat-level Monte Carlo (see MODEL.md)',
   };
+
+  // ---- on-site timeline: append newly detected events, persist via prev (KV "latest") ----
+  const tl = Array.isArray(prev.timeline) ? [...prev.timeline] : [];
+  const wasEmpty = tl.length === 0;
+  const seenIds = new Set(tl.map(e => e.id));
+  const addEv = (id, text) => { if (!seenIds.has(id)) { tl.unshift({ id, at: out.updated_at, text }); seenIds.add(id); } };
+  const hmIL = iso => { const d = new Date(iso); return String((d.getUTCHours() + 2) % 24).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+  if (out.turnout) {
+    const s = out.turnout.series || [];
+    const last = s.length ? s[s.length - 1] : null;
+    const prevS = (prev.turnout && prev.turnout.series) || [];
+    const prevLast = prevS.length ? prevS[prevS.length - 1] : null;
+    const hIL = h => { h = +h; const H = Math.floor(h), M = Math.round((h - H) * 60); return String(H).padStart(2, '0') + ':' + String(M).padStart(2, '0'); };
+    if (last && (!prevLast || last.hour !== prevLast.hour || wasEmpty)) {
+      addEv('tr-' + String(last.hour), `דיווח הצבעה מוועדת הבחירות: ${(+last.now).toFixed(1)}% נכון ל־${hIL(last.hour)} (אומדן סוף־יום ${out.turnout.national.est.toFixed(1)}%)`);
+    }
+    if (out.turnout.sectorsAt && (out.turnout.sectorsAt !== (prev.turnout && prev.turnout.sectorsAt) || wasEmpty)) {
+      const g = id => { const x = (out.turnout.sectors || []).find(y => y.id === id); return x ? x.est.toFixed(1) : '—'; };
+      addEv('sec-' + out.turnout.sectorsAt, `פילוח מגזרי חדש (נתוני ${hmIL(out.turnout.sectorsAt)}): ערבים ${g('arab')}%, חרדים ${g('haredi')}%, יו״ש ${g('judea_samaria')}% — אומדני סוף־יום`);
+    }
+  }
+  const pc = prev.benchmark && prev.benchmark.coalitionMajority;
+  const nc = out.benchmark && out.benchmark.coalitionMajority;
+  if (pc != null && nc != null && Math.abs(nc - pc) >= 2) {
+    addEv('pm-' + out.updated_at.slice(0, 13), `Polymarket: שוק ״רוב קואליציוני״ ${nc}% (היה ${pc}%) — הקשר בלבד, לא קלט למודל`);
+  }
+  if (wasEmpty && nc != null) {
+    addEv('pm-open', `מעקב שווקים: ״רוב קואליציוני״ ${nc}%, כנסת תקועה ${out.benchmark.hungParliament != null ? out.benchmark.hungParliament : '—'}% — הקשר בלבד, לא קלט למודל`);
+  }
+  out.timeline = tl.slice(0, 12);
   return out;
 }
