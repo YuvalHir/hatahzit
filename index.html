@@ -168,7 +168,7 @@ footer a{color:var(--dim)}
         <div class="chip c-center">גוש המרכז 61+ <b id="chipC">~5%</b></div>
       </div>
       <div class="band">
-        <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>4% – 16%</span></div>
+        <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>1.5% – 13%</span></div>
         <div class="track2">
           <div class="rng" style="right:4%;width:12%"></div>
           <div class="pt" style="right:9%"></div>
@@ -214,70 +214,38 @@ footer a{color:var(--dim)}
 
 <!-- ============ MODEL ============ -->
 <section id="model">
-  <div class="sec-head"><span class="sec-num">02</span><h2>המודל: פרמטרים ומשקלים</h2><span class="sec-sub">כל פרמטר תורם הערכה משלו; המשוקלל הוא התחזית</span></div>
-  <div class="stack">
-    <div style="width:30%;background:#4d8dff">30%</div>
-    <div style="width:22%;background:#12c2b3">22%</div>
-    <div style="width:13%;background:#ffd166">13%</div>
-    <div style="width:20%;background:#b48cff">20%</div>
-    <div style="width:15%;background:#ff9d5c">15%</div>
+  <div class="sec-head"><span class="sec-num">02</span><h2>המודל: סימולציית מונטה־קרלו ברמת מנדטים</h2><span class="sec-sub">100,000 הגרלות · סקרים = prior · הצבעה מגזרית חיה = עדכון · שווקים = בקרת שפיות בלבד</span></div>
+
+  <div class="cardbox">
+    <div class="note" style="margin:8px 6px"><b>איך זה עובד:</b> (1) ששת הסקרים האחרונים הופכים למניות קול לכל מפלגה (כולל רשימות מתחת לסף); (2) בכל הגרלה נבחר סקר אחד — כך נשמרים ה־house effects, כולל סקר חריג; (3) מוחל עדכון מכני של ההצבעה המגזרית החיה מול 2022 (כל מפלגה מוזזת לפי חשיפתה המגזרית — כך ההצבעה הערבית עובדת בכיוון הנכון: יותר מנדטים ערביים = פחות לשני הגושים); (4) רעש מערכתי מותאם בין גושים (ס״ס 2%) + רעש מפלגתי (6% יחסי); (5) סף חסימה 3.25%, חלוקת 120 מנדטים בבדר־עופר עם הסכמי העודפים המאומתים, והסטת מעטפות כפולות (שיפוט, מסומן); (6) נספרים מקרי ימין≥61 ומרכז≥61. הפיצול בין הגושים <b>נגזר מהסימולציה</b>, לא קבוע. מפרט מלא: <a href="https://github.com/YuvalHir/hatahzit/blob/main/MODEL.md" style="color:var(--gold)">MODEL.md</a>.</div>
   </div>
-  <div class="cardbox" style="overflow-x:auto">
+
+  <div class="cardbox" style="overflow-x:auto;margin-top:14px">
   <table class="model-table">
-    <thead><tr><th>פרמטר</th><th>מה הנתון אומר (27.10, עד ~15:15)</th><th class="num">הערכת 61+</th><th class="num">משקל</th><th class="why">למה המשקל הזה</th></tr></thead>
+    <thead><tr><th>תוצאה חיה (מהסימולציה)</th><th class="num">ערך</th><th>הערות</th></tr></thead>
     <tbody>
-    <tr>
-      <td><b>סקרי הערוצים</b> (6 סקרים, 20–23.10)<span class="tag d">נתון</span></td>
-      <td>אף גוש לא מתקרב ל־61: ימין 48–62 (ממוצע 52.5), מרכז 44–56 (ממוצע 51.2). 5 מתוך 6 סקרים: אף גוש לא מעל 56.</td>
-      <td class="num">10%<span class="tag j">שיפוט</span></td>
-      <td class="num"><span class="wpill" style="background:#4d8dff">28%</span></td>
-      <td class="why">הבסיס הסטטיסטי היציב היחיד. פער של 8–10 מנדטים מהממוצע גדול אפילו על טעות דגימה אופיינית, אבל סקרים בישראל פספסו נדנדות מאוחרות בעבר.</td>
-    </tr>
-    <tr>
-      <td><b>שוק ״רוב קואליציוני״</b> — Polymarket<span class="tag d">נתון</span></td>
-      <td>״איזושהי קואליציה עם רוב״: <b>7.5%</b> (ירד מ־11.5% בבוקר). ״כנסת תקועה״: 34%.</td>
-      <td class="num"><span id="estCoal">7.5%</span><span class="tag d">נתון</span></td>
-      <td class="num"><span class="wpill" style="background:#12c2b3">20%</span></td>
-      <td class="why">השוק הזה מתמחר בדיוק את שאלת ה־61+, ולכן משקל גבוה — אבל הוא דליל (נפח נמוך) וסוחר יחיד יכול להזיזו, לכן לא יותר מ־~רבע.</td>
-    </tr>
-    <tr>
-      <td><b>שוק ראשות הממשלה + מפלגה מנצחת</b> — Polymarket<span class="tag d">נתון</span></td>
-      <td>איזנקוט 64.6% מול נתניהו 22.5%; ישר! 75.5% כמפלגה הגדולה (נפח 24ש׳ ~$3.5M, הנזיל ביותר). כיוון: חיזוק גוש המרכז, אבל זכייה במפלגה הגדולה ≠ 61 מנדטים.</td>
-      <td class="num">12%<span class="tag j">שיפוט</span></td>
-      <td class="num"><span class="wpill" style="background:#ffd166">12%</span></td>
-      <td class="why">נזיל ואינפורמטיבי על מי ירכיב ממשלה, אבל עקיף לשאלת ה־61+ עצמה — לכן משקל נמוך־בינוני.</td>
-    </tr>
-    <tr>
-      <td><b>אחוזי הצבעה + פילוח מגזרי</b> — ועדת הבחירות / Votes26<span class="tag d">נתון</span></td>
-      <td>ארצי: 44.9% ב־14:00 (שיא מאז 1973), צפי סוף־יום 76.9%. בפילוח: מעוזי מרכז־שמאל <b>+11.6</b> מול 2022, חילונים +7.9; חרדים <b>−4.7</b>, מעוזי ימין רק +1.8 — החלשת נתיב ה־61 של הימין.</td>
-      <td class="num"><span id="estTurn">7%</span><span class="tag j">שיפוט</span></td>
-      <td class="num"><span class="wpill" style="background:#b48cff">18%</span></td>
-      <td class="why">הנתון הרשמי היחיד מיום הבחירות עצמו, עם פירוק מגזרי אמיתי (דיווחי קלפיות 11:58–12:29) — לכן משקל גבוה יחסית. ההערכה (7%) משקפת שהכיוון פועל בעיקר נגד רוב ימין; הפילוח עוד יתעדכן ב־16:00/18:00.</td>
-    </tr>
-    <tr>
-      <td><b>אחוז הצבעה במגזר הערבי</b> — ועדת הבחירות / Votes26<span class="tag d">נתון</span></td>
-      <td>המגזר הערבי: <b id="arabNowCell">24.6%</b> עד הצהריים, צפי סוף־יום <b id="arabEstCell">62.8%</b> מול 52.7% ב־2022 (<b id="arabDeltaCell">+10.1</b> נק׳) — עלייה חדה מתמשכת מהבוקר.</td>
-      <td class="num"><span id="estArab">14%</span><span class="tag j">שיפוט</span></td>
-      <td class="num"><span class="wpill" style="background:#7bd88f">10%</span></td>
-      <td class="why">מעקב ייעודי: עליית הצבעה ערבית מחזקת את הרשימות הערביות ומחלישה את נתיב ה־61 של הימין. כלל שיפוט גלוי: 10% בסיס + 0.4 נק׳ לכל נקודת עלייה בצפי מול 2022 (רצפה 4%, תקרה 20%). מתעדכן עם כל פרסום מגזרי של הוועדה.</td>
-    </tr>
-    <tr>
-      <td><b>איתותים משלימים</b> — Kalshi, גוגל טרנדס, מט״ח/מניות<span class="tag d">נתון</span></td>
-      <td>Kalshi מתכנס עם פולימרקט (פער ~4 נק׳ קבוע, בלי סטיית כיוון). טרנדס: עניין שגרתי בבחירות, בלי חריגה. הבורסה בת״א סגורה; שקל/דולר 3.078, בלי תנועה חריגה.</td>
-      <td class="num">10%<span class="tag j">נייטרלי</span></td>
-      <td class="num"><span class="wpill" style="background:#ff9d5c">12%</span></td>
-      <td class="why">משמשים בקרת־שפיות (בדיקת סטיות) יותר מאשר אות עצמאי; משקל נמוך.</td>
-    </tr>
-    <tr style="border-top:2px solid var(--line)">
-      <td><b>תחזית משוקללת</b></td>
-      <td id="formula">0.28×10 + 0.20×15 + 0.12×12 + 0.18×8.5 + 0.10×14 + 0.12×10</td>
-      <td class="num"><b style="color:var(--gold);font-size:16px" id="estTotal">~9%</b></td>
-      <td class="num">100%</td>
-      <td class="why">כלומר: ~91% שאף גוש לא מגיע ל־61+. פיצול: ימין ~4%, מרכז ~5%.</td>
-    </tr>
+    <tr><td><b>P(ימין 61+)</b></td><td class="num"><b style="color:var(--right)" id="mcR">—</b></td><td>הגוש הקרוב יותר: ממוצע סקרים 52.5, וסקר חריג (ערוץ 14) כבר נותן 62.</td></tr>
+    <tr><td><b>P(מרכז 61+)</b></td><td class="num"><b style="color:var(--center)" id="mcC">—</b></td><td>ממוצע סקרים 51.2–51.8, מקסימום 56 — רחוק מהסף.</td></tr>
+    <tr><td><b>P(אחד הגושים 61+)</b></td><td class="num"><b style="color:var(--gold);font-size:16px" id="mcA">—</b></td><td>המספר בראש העמוד. מתעדכן ~כל חצי שעה עם הנתונים החיים.</td></tr>
+    <tr><td>ציפיית מנדטים (ימין · מרכז · ערביות)</td><td class="num" id="mcExp">—</td><td>ההצבעה הערבית הגבוהה (+19% מול 2022) מוסיפה ~2 מנדטים לרשימות הערביות על חשבון הגושים.</td></tr>
+    <tr><td>סיכוי לעבור את הסף</td><td class="num" id="mcThresh">—</td><td>עמך ישראל (וינטר) והמילואימניקים (הנדל־זליכה) — הרשימות הקרובות ל־3.25% בסקרים.</td></tr>
+    <tr><td>עדכון אחרון של הסימולציה</td><td class="num" id="mcStamp">—</td><td>100,000 הגרלות בכל ריצה.</td></tr>
     </tbody>
   </table>
   </div>
+
+  <div class="note" style="margin-top:12px"><b>רגישות חשובה (שיפוט גלוי):</b> הזנב של התחזית מונע מסקר יחיד חריג — ערוץ 14 (ליכוד 30, גוש ימין 62 כבר בסקר). עם כל 6 הסקרים בשוויון משקל: P(61+)≈<b>12–13%</b>. בלי סקר החריג: ≈<b>1.5%</b>. שוק ה״רוב הקואליציוני״ (~15%) בין שניהם. ההערכה הכנה היא טווח, לא נקודה — וזו הסיבה לסרגל ה־1.5–13% למעלה.</div>
+
+  <div class="cardbox" style="overflow-x:auto;margin-top:14px">
+  <table class="model-table">
+    <thead><tr><th>בקרת שפיות מול השווקים (לא מוזן למודל)</th><th class="num">שוק</th><th class="num">סימולציה</th></tr></thead>
+    <tbody>
+    <tr><td>״איזושהי קואליציה עם רוב״ (Polymarket, דליל)</td><td class="num" id="bmCoal">—</td><td class="num" id="bmCoalMc">—</td></tr>
+    <tr><td>״כנסת תקועה״ (Polymarket)</td><td class="num" id="bmHung">—</td><td class="num" id="bmHungMc">—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:10px"><b>למה השווקים לא בתוך המודל:</b> הם מתעדכנים מאותם נתוני ועדה שהמודל כבר משתמש בהם — שילובם יהיה ספירה כפולה. הם מוצגים כבקרה בלבד; סטייה גדולה בין הסימולציה לשוק מסומנת בציר הזמן.</div>
 </section>
 
 <!-- ============ TURNOUT / SECTORS ============ -->
@@ -315,7 +283,7 @@ footer a{color:var(--dim)}
       <div class="tstat"><div class="h">צפי סוף־יום</div><div class="v" id="arabEst">62.8%</div><div class="s">מול 52.7% ב־2022</div></div>
       <div class="tstat"><div class="h">פער מול 2022</div><div class="v" id="arabDelta" style="color:var(--center)">+10.1</div><div class="s">נקודות אחוז (צפי)</div></div>
     </div>
-    <div class="note" style="margin-top:10px"><b>למה זה חשוב לשאלת ה־61+:</b> כל נקודת הצבעה ערבית נוספת היא כמעט כולה קולות לרשימות הערביות (רע״ם / חד״ש־תע״ל / בל״ד) — קולות שלא הולכים למפלגות גוש הימין. עלייה של ~+10 נק׳ כפי שמצופה כעת מחזקת את הרשימות הערביות, מקטינה את פלח המנדטים של הימין, ומקרבת מעט את המחנה המתחרה — אבל בעיקר מרחיקה את הימין מ־61. ואם בל״ד מתקרבת לסף החסימה, כל נקודה יכולה להזיז בין ~0 ל־4 מנדטים. המודל מתמחר זאת בפרמטר ייעודי (משקל 10%, כלל שיפוט גלוי בטבלת המודל). הפילוח יתעדכן עם כל פרסום מגזרי של הוועדה (16:00 / 18:00 / 20:00). שים לב: זהו נתון הצבעה בלבד — לא תוצאות ולא מדגם.</div>
+    <div class="note" style="margin-top:10px"><b>למה זה חשוב לשאלת ה־61+:</b> כל נקודת הצבעה ערבית נוספת היא כמעט כולה קולות לרשימות הערביות (רע״ם / חד״ש־תע״ל / בל״ד) — קולות שלא הולכים למפלגות גוש הימין. עלייה של ~+10 נק׳ כפי שמצופה כעת מחזקת את הרשימות הערביות, מקטינה את פלח המנדטים של הימין, ומקרבת מעט את המחנה המתחרה — אבל בעיקר מרחיקה את הימין מ־61. ואם בל״ד מתקרבת לסף החסימה, כל נקודה יכולה להזיז בין ~0 ל־4 מנדטים. בסימולציה זה עובד מכנית: כל מפלגה מוזזת לפי החשיפה המגזרית שלה — עלייה ערבית מוסיפה מנדטים לרשימות הערביות על חשבון שני הגושים (תיקון באג שזיהה התייעצות עם מודלי AI). הפילוח יתעדכן עם כל פרסום מגזרי של הוועדה (16:00 / 18:00 / 20:00). שים לב: זהו נתון הצבעה בלבד — לא תוצאות ולא מדגם.</div>
   </div>
 </section>
 
@@ -362,7 +330,7 @@ footer a{color:var(--dim)}
   <div class="sec-head"><span class="sec-num">06</span><h2>מה ישנה את התחזית</h2></div>
   <div class="notes">
     <div class="note"><b>מדגמי הערוצים (22:00):</b> העדכון המשמעותי הראשון. מדגם שמראה גוש על 59+ יעלה את ההסתברות ל־61+ באופן מיידי; המודל יעודכן עם פרסום המדגמים.</div>
-    <div class="note"><b>עדכון הפילוח המגזרי (16:00 / 18:00 / 20:00):</b> אם הפער חרדים−מרכז יתהפך או יעמיק, משקל פרמטר ההצבעה וההערכה ישתנו.</div>
+    <div class="note"><b>עדכון הפילוח המגזרי (16:00 / 18:00 / 20:00):</b> כל פרסום מוזן אוטומטית לסימולציה (ריצה מחדש ~כל חצי שעה) — אם הפער חרדים−מרכז יתהפך או ההצבעה הערבית תאט, התחזית תזוז.</div>
     <div class="note"><b>תוצאות אמת של קלפיות המדגם:</b> אישור/הפרכה של מדגמי הערוצים בשעות הלילה.</div>
     <div class="note"><b>סטיית Polymarket–Kalshi</b> או גל עסקאות חד־צדדי חדש בשוק ה־61+ עצמו.</div>
   </div>
@@ -374,7 +342,7 @@ footer a{color:var(--dim)}
   <div class="sec-head"><span class="sec-num">07</span><h2>גורמים נוספים שיכולים להזיז את ה־61+</h2><span class="sec-sub">רשימת בקרה מלאה · מה נכנס למודל ומה נשאר תצפית</span></div>
   <div class="notes">
     <div class="note"><b>סף החסימה של מפלגות קטנות</b> <span class="tag j">שיפוט</span> — בל״ד, וגם מפלגות קטנות בשני הצדדים, קרובות ל־3.25%. מעבר/נפילה מהסף מזיז ~4 מנדטים בבת אחת ומחלק מחדש מנדטים לכל הגושים. לא מומחר מספרית (אין נתון חי) — נשמר כתצפית שיפוט.</div>
-    <div class="note"><b>הצבעה מגזרית דיפרנציאלית</b> <span class="tag d">נתון</span> — כבר במודל: חרדים (בתוך פרמטר ההצבעה) והמגזר הערבי (פרמטר ייעודי 10%). הדפוס ההפוך (חרדים למעלה, ערבים למטה) מחזק ימין; ההפוך מחזק מרכז.</div>
+    <div class="note"><b>הצבעה מגזרית דיפרנציאלית</b> <span class="tag d">נתון</span> — כבר במודל: העדכון המגזרי המכני (חרדים, ערבים, יו"ש, דרוזים, נוצרים) מוזן ישירות לסימולציה. הדפוס ההפוך (חרדים למעלה, ערבים למטה) מחזק ימין; ההפוך מחזק מרכז.</div>
     <div class="note"><b>גמישות קואליציונית אחרי הבחירות</b> <span class="tag d">נתון</span> — גם גוש עם 61 על הנייר לא תמיד מרכיב ממשלה (קווים אדומים, ליברמן/רע״ם). שוק ״כנסת תקועה״ ב־Polymarket (~37%) הוא המדד החי, ונכנס לפרמטר האיתותים.</div>
     <div class="note"><b>מעטפות כפולות</b> <span class="tag j">שיפוט</span> — חיילים, שגרירויות, עצורים: ~5–6 מנדטים בשווי קולות, נספרות רק אחרי תוצאות הקלפיות. היסטורית נוטות מעט לימין/ציונות־דתית.</div>
     <div class="note"><b>הסכמי עודפים</b> <span class="tag j">שיפוט</span> — זוגות מפלגות שחתמו הסכם עודפים זוכים לעתים במנדט נוסף על חשבון רשימות גדולות; אפקט קטן אבל אמיתי בקצה ה־61.</div>
@@ -417,32 +385,40 @@ footer a{color:var(--dim)}
 (function(){
   function ilTime(d){return new Date(d).toLocaleTimeString('he-IL',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit'});}
   function ilDate(d){return new Date(d).toLocaleString('he-IL',{timeZone:'Asia/Jerusalem',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+  function set(id,v){var e=document.getElementById(id); if(e)e.textContent=v;}
   fetch('/api/data').then(function(r){return r.ok?r.json():null;}).then(function(d){
-    if(!d||!d.model)return;
-    var m=d.model, no=Math.round(m.no61*100), yes=Math.round(m.p_any_61*100);
-    var el=document.getElementById('pct'); if(el){el.textContent=no+'%'; el.dataset.target=no;}
-    var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-m.no61)).toFixed(2));
-    var cr=document.getElementById('chipR'); if(cr)cr.textContent='~'+Math.round(m.p_right_61*100)+'%';
-    var cc=document.getElementById('chipC'); if(cc)cc.textContent='~'+Math.round(m.p_center_61*100)+'%';
-    var ec=document.getElementById('estCoal'); if(ec)ec.textContent=(m.inputs.coalition_est*100).toFixed(1)+'%';
-    var et=document.getElementById('estTurn'); if(et)et.textContent=(m.inputs.turnout_est*100).toFixed(1).replace(/\.0$/,'')+'%';
-    if(m.inputs.arab_est!=null){var ea=document.getElementById('estArab'); if(ea)ea.textContent=(m.inputs.arab_est*100).toFixed(1).replace(/\.0$/,'')+'%';}
-    var f=document.getElementById('formula'); if(f)f.textContent='0.28×'+(m.inputs.polls_est*100)+' + 0.20×'+(m.inputs.coalition_est*100).toFixed(1)+' + 0.12×'+(m.inputs.pm_est*100)+' + 0.18×'+(m.inputs.turnout_est*100).toFixed(1)+' + 0.10×'+(m.inputs.arab_est!=null?(m.inputs.arab_est*100).toFixed(1):'10')+' + 0.12×'+(m.inputs.signals_est*100);
-    var tt=document.getElementById('estTotal'); if(tt)tt.textContent='~'+yes+'%';
-    var pt=document.getElementById('pAnyText'); if(pt)pt.textContent=yes+'%';
+    if(!d)return;
     var st=document.getElementById('stamp'); if(st)st.textContent=ilDate(d.updated_at);
+    var mc=d.mc&&d.mc.mc;
+    if(mc){
+      var yes=Math.round(mc.p_any_61*100), no=100-yes;
+      set('pct',no+'%');
+      var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-mc.p_any_61)).toFixed(2));
+      set('chipR','~'+Math.round(mc.p_right_61*100)+'%');
+      set('chipC','~'+Math.round(mc.p_center_61*100)+'%');
+      set('pAnyText',yes+'%');
+      set('mcR',(mc.p_right_61*100).toFixed(1)+'%');
+      set('mcC',(mc.p_center_61*100).toFixed(1)+'%');
+      set('mcA',(mc.p_any_61*100).toFixed(1)+'%');
+      set('mcExp',mc.exp_seats.right+' · '+mc.exp_seats.center+' · '+mc.exp_seats.arab);
+      set('mcThresh','עמך ישראל '+Math.round(mc.threshold_pass.winter*100)+'% · המילואימניקים '+Math.round(mc.threshold_pass.miluim*100)+'%');
+      set('mcStamp',ilDate(d.mc.updated_at));
+      set('bmCoalMc',(mc.p_any_61*100).toFixed(1)+'%');
+      set('bmHungMc',(100-mc.p_any_61*100).toFixed(1)+'%');
+    }
+    if(d.benchmark){
+      if(d.benchmark.coalitionMajority!=null)set('bmCoal',d.benchmark.coalitionMajority+'%');
+      if(d.benchmark.hungParliament!=null)set('bmHung',d.benchmark.hungParliament+'%');
+    }
     if(d.turnout&&d.turnout.national){var n=d.turnout.national;
-      var tn=document.getElementById('tNow'); if(tn)tn.textContent=n.now.toFixed(1)+'%';
-      var te=document.getElementById('tEst'); if(te)te.textContent=n.est.toFixed(1)+'%';
-      var tr=document.getElementById('tRange'); if(tr)tr.textContent='טווח '+n.lo+'–'+n.hi+' · 2022: '+n.prevFinal2022+'%';}
+      set('tNow',n.now.toFixed(1)+'%');
+      set('tEst',n.est.toFixed(1)+'%');
+      set('tRange','טווח '+n.lo+'–'+n.hi+' · 2022: '+n.prevFinal2022+'%');}
     if(d.turnout&&d.turnout.arab){var A=d.turnout.arab;
       var sgn=function(x){return (x>0?'+':'')+(+x).toFixed(1);};
-      var an=document.getElementById('arabNow'); if(an)an.textContent=A.now.toFixed(1)+'%';
-      var ae=document.getElementById('arabEst'); if(ae)ae.textContent=A.est.toFixed(1)+'%';
-      var ad=document.getElementById('arabDelta'); if(ad)ad.textContent=sgn(A.deltaEstVs2022);
-      var an2=document.getElementById('arabNowCell'); if(an2)an2.textContent=A.now.toFixed(1)+'%';
-      var ae2=document.getElementById('arabEstCell'); if(ae2)ae2.textContent=A.est.toFixed(1)+'%';
-      var ad2=document.getElementById('arabDeltaCell'); if(ad2)ad2.textContent=sgn(A.deltaEstVs2022);}
+      set('arabNow',A.now.toFixed(1)+'%');
+      set('arabEst',A.est.toFixed(1)+'%');
+      set('arabDelta',sgn(A.deltaEstVs2022));}
     var tl=document.getElementById('tl');
     if(tl&&d.markets&&d.markets.pm&&d.markets.pm.length){
       var pm=d.markets.pm;
@@ -450,7 +426,7 @@ footer a{color:var(--dim)}
       var b=pm.find(function(x){return /netanyahu/i.test(x.label);});
       var y=d.markets.winner&&d.markets.winner[0];
       var row=document.createElement('div'); row.className='tlrow';
-      row.innerHTML='<div class="t">'+ilTime(d.updated_at)+'</div><div class="d"><b>עדכון אוטומטי (live):</b> איזנקוט <b>'+(e?e.price:'—')+'%</b>, נתניהו '+(b?b.price:'—')+'% · ישר! '+(y?y.price:'—')+'% · רוב קואליציוני '+(m.inputs.coalition_est*100).toFixed(1)+'% · Kalshi: '+(d.kalshi&&d.kalshi.length?d.kalshi.slice(0,3).map(function(k){return k.label+' '+k.price;}).join(' / '):'—')+'</div>';
+      row.innerHTML='<div class="t">'+ilTime(d.updated_at)+'</div><div class="d"><b>עדכון אוטומטי (live):</b> איזנקוט <b>'+(e?e.price:'—')+'%</b>, נתניהו '+(b?b.price:'—')+'% · ישר! '+(y?y.price:'—')+'% · שוק רוב קואליציוני '+(d.benchmark&&d.benchmark.coalitionMajority!=null?d.benchmark.coalitionMajority:'—')+'%'+(mc?' · <b>סימולציה: '+(mc.p_any_61*100).toFixed(1)+'%</b>':'')+'</div>';
       tl.prepend(row);
     }
   }).catch(function(){});

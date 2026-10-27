@@ -4,10 +4,14 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === '/api/data') {
-      const data = await env.HATAHZIT_KV.get('latest', 'text');
+      const [data, mc] = await Promise.all([
+        env.HATAHZIT_KV.get('latest', 'text'),
+        env.HATAHZIT_KV.get('mc', 'text'),
+      ]);
       if (!data) return new Response(JSON.stringify({ error: 'warming up, first scrape pending' }), {
         status: 503, headers: { 'content-type': 'application/json; charset=utf-8' } });
-      return new Response(data, { headers: {
+      const merged = mc ? data.trimEnd().replace(/}$/, ',"mc":' + mc.trim() + '}') : data;
+      return new Response(merged, { headers: {
         'content-type': 'application/json; charset=utf-8',
         'cache-control': 'public, max-age=60',
       } });

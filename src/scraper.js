@@ -108,39 +108,14 @@ export async function scrape(prev = {}) {
     out.trends = [...trends.matchAll(/<title>([^<]+)<\/title>/g)].map(m => m[1]).slice(1, 12);
   }
 
-  // ---- model (documented in MODEL.md; judgment estimates are constants, live estimates from data) ----
-  const polls_est = 0.10, pm_est = 0.12, signals_est = 0.10;          // judgment / neutral (fixed until human review)
-  let coalition_est = (prev.model && prev.model.inputs.coalition_est) || 0.075;
-  const coalRow = (out.markets.coalitionMajority || []).find(r => /yes/i.test(r.label)) || (out.markets.coalitionMajority || [])[0];
-  if (coalRow) coalition_est = coalRow.price / 100;
-  let turnout_est = 0.07;                                              // judgment baseline
-  const har = out.turnout && out.turnout.sectors.find(s => s.id === 'haredi');
-  if (har) { const d = har.est - har.prev2022; if (d > -2) turnout_est += 0.015; if (d < -7) turnout_est -= 0.015; }
-  turnout_est = Math.min(0.15, Math.max(0.03, turnout_est));
-
-  // Arab turnout input (judgment rule over a live data delta):
-  // baseline 10%; +0.4pp of P(61+) per +1pp of projected EOD Arab turnout vs the 2022 final (52.7%).
-  // Rationale: each extra pp of Arab turnout ~= extra Arab-list seats, which weakens the right bloc's
-  // path to 61 and slightly improves the anti-Netanyahu camp's. Pure judgment multiplier, clamped.
-  let arab_est = 0.10;                                                 // judgment baseline (no sector data)
-  const arb = out.turnout && out.turnout.sectors.find(s => s.id === 'arab');
-  if (arb) {
-    const d = arb.est - arb.prev2022;
-    arab_est = 0.10 + 0.004 * d;
-    arab_est = Math.min(0.20, Math.max(0.04, arab_est));
-  }
-
-  const W = { polls: 0.28, coalitionMarket: 0.20, pmMarket: 0.12, turnout: 0.18, arabTurnout: 0.10, signals: 0.12 };
-  const headline = W.polls * polls_est + W.coalitionMarket * coalition_est + W.pmMarket * pm_est
-                 + W.turnout * turnout_est + W.arabTurnout * arab_est + W.signals * signals_est;
-  out.model = {
-    weights: W,
-    inputs: { polls_est, coalition_est: +coalition_est.toFixed(4), pm_est, turnout_est: +turnout_est.toFixed(4),
-              arab_est: +arab_est.toFixed(4), signals_est },
-    p_any_61: +headline.toFixed(4),
-    p_right_61: +(headline * 4 / 9).toFixed(4),   // split fixed at judgment ratio 4:5 (documented)
-    p_center_61: +(headline * 5 / 9).toFixed(4),
-    no61: +(1 - headline).toFixed(4),
+  // ---- benchmark only (NOT blended into the forecast): the forecast is the seat-level
+  // Monte Carlo in src/mc.mjs, computed off-worker and pushed to KV key "mc". ----
+  const coalRow = (out.markets.coalitionMajority || [])[0];
+  const hungRow = (out.markets.hungParliament || [])[0];
+  out.benchmark = {
+    coalitionMajority: coalRow ? coalRow.price : null,
+    hungParliament: hungRow ? hungRow.price : null,
+    note: 'markets are a sanity benchmark only; the headline comes from the seat-level Monte Carlo (see MODEL.md)',
   };
   return out;
 }
