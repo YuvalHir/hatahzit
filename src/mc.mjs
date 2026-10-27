@@ -35,10 +35,18 @@ export const SURPLUS_PAIRS = [
   ["beyahad", "beiteinu"], ["raam", "meshutefet"],
 ];
 
-// Judgment: assumed vote share for lists at/near the 3.25% threshold (polls show 0-4 seats).
-// winter ~3.0% (Maariv: just below threshold; i24: 4 seats), miluim 3.3% (4 seats in 3/7 polls),
-// noam 0.5%, haredi 0.9% (per Maariv-reported vote shares; tagged judgment)
-export const SUBTHRESHOLD_SHARES = { winter: 0.030, miluim: 0.033, noam: 0.005, haredi: 0.009 };
+// Judgment: assumed vote share for lists at/near the 3.25% threshold.
+// Gemini r4 #1 (mechanically right): in a poll where the party got 0 seats, that pollster's
+// world has it BELOW 3.25% - so init below threshold (winter 2.7%, miluim 2.9%), not at the
+// cross-poll mean. In polls that seated it, the midpoint inversion sets the share (passes).
+export const NONPASS_SHARES = { winter: 0.027, miluim: 0.029, noam: 0.005, haredi: 0.009 };
+// Gemini r4 #2 (verified in code): a sub-threshold list's votes come mostly from specific
+// blocs, not pro rata from everyone. Winter ~95% right; Reservists ~60/40 right/center
+// (judgment); Noam/Litner ~100% right. The old (1-wasted) deflation gave the right ~2+
+// free seats whenever Winter passed - fixed by source-based deduction at init.
+export const SOURCE_BLOC = { winter: { right: 0.95, center: 0.05 }, miluim: { right: 0.6, center: 0.4 }, noam: { right: 1 }, haredi: { right: 1 } };
+const BLOC_OF = {};
+for (const b in BLOCS) for (const p of BLOCS[b]) BLOC_OF[p] = b;
 
 // Judgment matrix: fraction of each party's votes by sector (grounded in historical
 // voting patterns, NOT a live source). Rows are normalized in code.
@@ -147,19 +155,34 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
   for (let sim = 0; sim < sims; sim++) {
     const poll = polls[(rng() * polls.length) | 0];
     const votes = {};
-    // Gemini r3 #2 (verified real bug): shares must be consistent so a party the poll
-    // gave seats starts ABOVE the 3.25% threshold. Seat share = valid-vote share among
-    // passing lists; invert with the Bader-Ofer midpoint (+0.5 seat) and deflate by the
-    // wasted share of lists the poll did NOT seat. Passing shares sum to (1 - wasted).
+    // Seat->share inversion with Bader-Ofer midpoint (+0.5), then the non-seated lists'
+    // shares are DEDUCTED FROM THEIR SOURCE BLOC (proportional within bloc), not pro rata
+    // from everyone (Gemini r4 #2). Passing shares sum to (1 - wasted).
     let seatSum = 0, npass = 0, wasted = 0;
     for (const p of PARTIES) {
       if (poll.seats[p] != null && poll.seats[p] > 0) { seatSum += poll.seats[p]; npass++; }
-      else wasted += SUBTHRESHOLD_SHARES[p] != null ? SUBTHRESHOLD_SHARES[p] : 0;
+      else wasted += NONPASS_SHARES[p] != null ? NONPASS_SHARES[p] : 0;
     }
-    const cSeat = (1 - wasted) / (seatSum + 0.5 * npass);
+    const cSeat = 1 / (seatSum + 0.5 * npass);
+    const raw = {};
+    const braw = {};
     for (const p of PARTIES) {
-      if (poll.seats[p] != null && poll.seats[p] > 0) votes[p] = (poll.seats[p] + 0.5) * cSeat;
-      else votes[p] = SUBTHRESHOLD_SHARES[p] != null ? SUBTHRESHOLD_SHARES[p] : 0;
+      raw[p] = poll.seats[p] != null && poll.seats[p] > 0 ? (poll.seats[p] + 0.5) * cSeat : 0;
+      if (raw[p] > 0) braw[BLOC_OF[p]] = (braw[BLOC_OF[p]] || 0) + raw[p];
+    }
+    for (const p of PARTIES) {
+      if (poll.seats[p] != null && poll.seats[p] > 0) {
+        let v = raw[p];
+        const b = BLOC_OF[p];
+        for (const q in NONPASS_SHARES) {
+          if (poll.seats[q] != null && poll.seats[q] > 0) continue;
+          const f = SOURCE_BLOC[q] && SOURCE_BLOC[q][b];
+          if (f && braw[b] > 0) v -= NONPASS_SHARES[q] * f * raw[p] / braw[b];
+        }
+        votes[p] = Math.max(v, 0.001);
+      } else {
+        votes[p] = NONPASS_SHARES[p] != null ? NONPASS_SHARES[p] : 0;
+      }
     }
     // turnout shock (uncertainty in the update itself)
     const kappa = 1 + randn() * turnoutShockSd;

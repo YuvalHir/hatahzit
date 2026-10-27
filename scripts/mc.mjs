@@ -23,5 +23,9 @@ const progress = Math.max(0, Math.min(1, (dataMins - 15 * 60) / (4.5 * 60)));
 const turnoutDiscount = 0.5 + 0.25 * progress;
 const t0 = Date.now();
 const mc = runMc({ sectorDeltas, nationalDelta, sims: 100000, turnoutDiscount });
+// Second precomputed run without Channel 14 (site toggle; headline default keeps Ch14 ON per owner ruling)
+import { POLLS } from '../src/mc.mjs';
+const exCh14 = runMc({ sectorDeltas, nationalDelta, sims: 100000, turnoutDiscount, polls: POLLS.filter(p => p.id !== 'ch14') });
+const exCh14I24 = runMc({ sectorDeltas, nationalDelta, sims: 100000, turnoutDiscount, polls: POLLS.filter(p => p.id !== 'ch14' && p.id !== 'i24') });
 console.error('sim time ms:', Date.now() - t0);
-console.log(JSON.stringify({ updated_at: new Date().toISOString(), sectorsAt: withSectors ? withSectors.at : null, sectors, mc }, null, 0));
+console.log(JSON.stringify({ updated_at: new Date().toISOString(), sectorsAt: withSectors ? withSectors.at : null, sectors, mc, exCh14, exCh14I24 }, null, 0));

@@ -109,6 +109,10 @@ td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
 .notes{display:grid;gap:10px}
 .note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;color:var(--dim)}
 .note b{color:var(--txt)}
+.mix-toggle{display:flex;gap:6px;margin:10px 0 4px}
+.mix-toggle button{background:none;border:1px solid var(--line);border-radius:999px;color:var(--dim);padding:5px 14px;font-size:12.5px;cursor:pointer}
+.mix-toggle button.on{border-color:var(--gold);color:var(--gold);font-weight:700}
+@media (max-width:640px){.mix-toggle{justify-content:center}}
 /* opt-in deep dive */
 .deep{display:none}
 body.deep-open .deep{display:block}
@@ -175,13 +179,16 @@ footer a{color:var(--dim)}
         <div class="chip c-right">גוש הימין 61+ <b id="chipR">~4%</b></div>
         <div class="chip c-center">גוש המרכז 61+ <b id="chipC">~5%</b></div>
       </div>
+      <div class="mix-toggle" id="mixToggle">
+        <button data-mix="all" class="on">כל 7 הסקרים</button><button data-mix="no14">בלי ערוץ 14</button><button data-mix="no14+i24" title="שני המכונים קשורים לשלמה פילבר (לפי הארץ/ויקיפדיה)">בלי ערוץ 14+i24</button>
+      </div>
       <div class="band">
-        <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>3% – 11%</span></div>
+        <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>8% – 11%</span></div>
         <div class="track2">
-          <div class="rng" style="right:1.5%;width:9.5%"></div>
+          <div class="rng" style="right:6.5%;width:4.5%"></div>
           <div class="pt" style="right:10.5%"></div>
         </div>
-        <div class="cap">הכותרת כוללת את סקר ערוץ 14 החריג. <b>ללא ערוץ 14: ≈3%</b> בלבד. פירוט בלחיצה על <b>?</b> · ההערכה אינה סקר; הדיסקליימר החוקי בתחתית.</div>
+        <div class="cap">ברירת־המחדל כוללת את כל הסקרים (החלטת הכותב); הכפתורים מחליפים תערובת מיד. ההערכה אינה סקר; הדיסקליימר החוקי בתחתית.</div>
       </div>
     </div>
   </div>
@@ -231,15 +238,15 @@ footer a{color:var(--dim)}
   <div class="sec-head"><span class="sec-num">02</span><h2>המודל: סימולציית מונטה־קרלו ברמת מנדטים</h2><span class="sec-sub">100,000 הגרלות · סקרים = prior · הצבעה מגזרית חיה = עדכון · שווקים = בקרת שפיות בלבד</span></div>
 
   <div class="cardbox">
-    <div class="note" style="margin:8px 6px"><b>איך זה עובד (v3.4, אחרי ארבעה סבבי ביקורת AI):</b> (1) <b>7</b> סקרים אחרונים (כולל מעריב־לזר 23.10) הופכים למניות קול לכל מפלגה, כולל רשימות מתחת לסף (שיעורי קול לפי מעריב: וינטר ~3%, הנדל־זליכה ~3.3%, נעם 0.5%, ליטנר 0.9%); (2) בכל הגרלה נבחר סקר אחד — ה־house effects נשמרים. שני בתי סקר מטים ימינה מסורתית (ערוץ 14 = Next Data/פילבר; i24 = דיירקט פולס — אומת שהם <b>שני</b> מכונים נפרדים, לא אחד); (3) עדכון מכני של ההצבעה המגזרית החיה: הדלתאות מכוילות לדלתא הארצית (תיקון אי־התאמה שזיהה קלוד), מוכפלות בהנחת תימחור קבועה יחסית (~×0.5) שמתחזקת רק עם דיוק המדידה — מחושב לפי <b>חותמת הדיווח של הוועדה</b>, לא שעון הקיר (×0.5 עד 15:00, עד ×0.75 ב־19:30; קלוד: ×0.85+ גבוה מדי כי הסקרים תמחרו את הגל באופן קבוע); (4) נדנדת מאזן מותאמת ס״ס ~2.5 מנדטים (קלוד: 3 כפל־ספר את השגיאה השיטתית שכבר בפיזור בתי־הסקר) + רעש מפלגתי <b>אדיטיבי עם רצפת שגיאת־דגימה</b> — σ=√(0.5 אחוז״² + (4% מהמנייה)²) — הרצפה מכסה רק שגיאת סקר־אחרון־מול־אמת (~1 מנדט/מפלגה, המדד 2022) כי הפיזור בין בתי הסקר כבר מקודד בתערובת (גראק); רשימות מתחת־סף נשארות חיות (ג׳מיני), עם רינורמליזציה חלקית תוך־גושית; (5) המרת מושבים למניות עם אינוורסיית אמצע־מנדט (+0.5) — כך מפלגה שקיבלה 4 מנדטים בסקר מתחילה <b>מעל</b> הסף (באג שג׳מיני תפס ואומת בקוד); (6) סף 3.25%, בדר־עופר עם הסכמי העודפים המאומתים; <b>הסטת מעטפות כפולות הושמטה</b> (ספירה כפולה — הסקרים כבר כוללים חיילים; המכפילים הספציפיים של ג׳מיני מכוילים לפער מדגמים־מול־אמת, לא לסקרים — לא אומת, לא שולב); (7) נספרים ימין≥61 ומרכז≥61. הפיצול בין הגושים <b>נגזר מהסימולציה</b>, לא קבוע. מפרט מלא: <a href="https://github.com/YuvalHir/hatahzit/blob/main/MODEL.md" style="color:var(--gold)">MODEL.md</a>.</div>
+    <div class="note" style="margin:8px 6px"><b>איך זה עובד (v3.5, אחרי ארבעה סבבי ביקורת AI):</b> (1) <b>7</b> סקרים אחרונים (כולל מעריב־לזר 23.10) הופכים למניות קול לכל מפלגה. רשימות מתחת־לסף: בסקר שנתן להן 0 מושבים הן מתחילות <b>מתחת</b> לסף (וינטר 2.7%, מילואימניקים 2.9% — ג׳מיני סבב 4), וקולותיהן <b>מנוכים מגוש המקור</b> (וינטר ~95% ימין; מילואימניקים 60/40) ולא מכולם באופן יחסי — תיקון שהוריד ~3 מנדטים מציפיית הימין; (2) בכל הגרלה נבחר סקר אחד — ה־house effects נשמרים. שני בתי סקר מטים ימינה מסורתית: ערוץ 14 = Next Data ו־i24 = דיירקט פולס — מכונים נפרדים, אבל <b>קשורים שניהם לשלמה פילבר</b> (Next Data בבעלות נציג בעלי ערוץ 14; דיירקט פולס בבעלות פילבר — הארץ/ויקיפדיה, מתועד). בגלל הקשר הכפתור למעלה מוריד את שניהם יחד; (3) עדכון מכני של ההצבעה המגזרית החיה: הדלתאות מכוילות לדלתא הארצית (תיקון אי־התאמה שזיהה קלוד), מוכפלות בהנחת תימחור קבועה יחסית (~×0.5) שמתחזקת רק עם דיוק המדידה — מחושב לפי <b>חותמת הדיווח של הוועדה</b>, לא שעון הקיר (×0.5 עד 15:00, עד ×0.75 ב־19:30; קלוד: ×0.85+ גבוה מדי כי הסקרים תמחרו את הגל באופן קבוע); (4) נדנדת מאזן מותאמת ס״ס ~2.5 מנדטים (קלוד: 3 כפל־ספר את השגיאה השיטתית שכבר בפיזור בתי־הסקר) + רעש מפלגתי <b>אדיטיבי עם רצפת שגיאת־דגימה</b> — σ=√(0.5 אחוז״² + (4% מהמנייה)²) — הרצפה מכסה רק שגיאת סקר־אחרון־מול־אמת (~1 מנדט/מפלגה, המדד 2022) כי הפיזור בין בתי הסקר כבר מקודד בתערובת (גראק); רשימות מתחת־סף נשארות חיות (ג׳מיני), עם רינורמליזציה חלקית תוך־גושית; (5) המרת מושבים למניות עם אינוורסיית אמצע־מנדט (+0.5) — כך מפלגה שקיבלה 4 מנדטים בסקר מתחילה <b>מעל</b> הסף (באג שג׳מיני תפס ואומת בקוד); (6) סף 3.25%, בדר־עופר עם הסכמי העודפים המאומתים; <b>הסטת מעטפות כפולות הושמטה</b> (ספירה כפולה — הסקרים כבר כוללים חיילים; המכפילים הספציפיים של ג׳מיני מכוילים לפער מדגמים־מול־אמת, לא לסקרים — לא אומת, לא שולב); (7) נספרים ימין≥61 ומרכז≥61. הפיצול בין הגושים <b>נגזר מהסימולציה</b>, לא קבוע. מפרט מלא: <a href="https://github.com/YuvalHir/hatahzit/blob/main/MODEL.md" style="color:var(--gold)">MODEL.md</a>.</div>
   </div>
 
   <div class="cardbox" style="overflow-x:auto;margin-top:14px">
   <table class="model-table">
     <thead><tr><th>תוצאה חיה (מהסימולציה)</th><th class="num">ערך</th><th>הערות</th></tr></thead>
     <tbody>
-    <tr><td><b>P(ימין 61+)</b></td><td class="num"><b style="color:var(--right)" id="mcR">—</b></td><td>ממוצע 7 הסקרים ~51. הזנב מונע בעיקר מבית הסקר החריג (ערוץ 14: ימין 62 כבר בסקר → 62% מותנה; i24: 18% מותנה).</td></tr>
-    <tr><td><b>P(מרכז 61+)</b></td><td class="num"><b style="color:var(--center)" id="mcC">—</b></td><td>ממוצע ~52.4, מקסימום בסקר 56 — זנב דק עם ס״ס מאזן 2.5 מנדטים.</td></tr>
+    <tr><td><b>P(ימין 61+)</b></td><td class="num"><b style="color:var(--right)" id="mcR">—</b></td><td>ממוצע ~49 אחרי ניכוי מקורות מתחת־הסף. הזנב מונע כמעט כולו מערוץ 14 (ימין 62 בסקר הגולמי).</td></tr>
+    <tr><td><b>P(מרכז 61+)</b></td><td class="num"><b style="color:var(--center)" id="mcC">—</b></td><td>ממוצע ~53.4 אחרי הניכוי (המילואימניקים לוקחים 40% מהמרכז), מקסימום בסקר 56 — זנב אמיתי עם ס״ס מאזן 2.5.</td></tr>
     <tr><td><b>P(אחד הגושים 61+)</b></td><td class="num"><b style="color:var(--gold);font-size:16px" id="mcA">—</b></td><td>המספר בראש העמוד. מתעדכן ~כל חצי שעה עם הנתונים החיים.</td></tr>
     <tr><td>ציפיית מנדטים (ימין · מרכז · ערביות)</td><td class="num" id="mcExp">—</td><td>ההצבעה הערבית הגבוהה (+19% גולמי, מוכפל בכיול ארצי ×50% תימחור סקרים) מוסיפה ~1 מנדט לרשימות הערביות על חשבון הגושים.</td></tr>
     <tr><td>סיכוי לעבור את הסף</td><td class="num" id="mcThresh">—</td><td>עמך ישראל (וינטר) והמילואימניקים (הנדל־זליכה) — הרשימות הקרובות ל־3.25% בסקרים.</td></tr>
@@ -248,7 +255,7 @@ footer a{color:var(--dim)}
   </table>
   </div>
 
-  <div class="note" style="margin-top:12px"><b>רגישות מבנית (גלוי):</b> הזנב הימני מונע מבית סקר חריג אחד — ערוץ 14 (ימין 62 כבר בסקר). במבנה ״תערובת בתי סקר״ (הבחירה שלנו, בהחלטת יובל): P(61+)≈<b>10.6%</b>; בלי ערוץ 14: ≈<b>3.1%</b>. במבנה ההטיה־המשותפת של קלוד: P(ימין)≈<b>~5%</b>. ג׳מיני וקלוד הציעו כיווץ משקל ערוץ 14 — נשארנו במשקל שווה בהחלטת יובל, והטווח מוצג במקום. רגישויות נוספות (לא בכותרת): ס״ס מאזן 2–3 מנדטים → 9.5–11.9%; שארית מעטפות כפולות ימנית של +1–1.5 מנדטים (הצעת גראק, <b>לא מאומתת</b>) → P(ימין) ~12.5–15.6%. שוק ה״רוב הקואליציוני״ (~15.5%) בצד הגבוה. ההערכה הכנה: טווח <b>3–11%</b>, לא נקודה.</div>
+  <div class="note" style="margin-top:12px"><b>מגמה (מומנטום) — לא הופעלה, הנתונים דלים:</b> נבדק מקור אמת להסתכלות לאורך זמן (ויקיפדיה, מסומך): ממוצע הסקרים באמצע אוקטובר היה ~51/51 (18.10, ״סקר הסקרים״ של מעריב; גוש הימין נע 49–53), וממוצע 7 הסקרים האחרונים (20–23.10) הוא ימין ~52 / מרכז ~52 — אין תזוזה מדידה מעבר לרעש, למרות נרטיב עיתונאי של היחלשות הליכוד. טבלה מלאה של סקרי בתי־המדגם לאורך זמן לא נגישה לאימות מהיר, ולכן <b>לא הוחלה הסטת מומנטום</b> (הנחה מסומנת; לא המצאנו מספרי מגמה). <b>רגישות מבנית (גלוי):</b> אחרי תיקון מקורות הקולות של מתחת־הסף (ג׳מיני סבב 4 — וינטר ~95% מהימין, המילואימניקים 60/40): הזנב הימני מונע מבית סקר חריג אחד — ערוץ 14; הזנב של המרכז רחב יותר. במבנה ״תערובת בתי סקר״ (הבחירה שלנו, בהחלטת יובל): P(61+)≈<b>10.6%</b> (ימין 4.7% / מרכז 6.0%); בלי ערוץ 14: ≈<b>8.2%</b> (ימין 1.3% / מרכז 6.9%). ג׳מיני וקלוד הציעו כיווץ משקל ערוץ 14 — נשארנו במשקל שווה בהחלטת יובל, והטווח מוצג במקום. רגישויות נוספות: ס״ס מאזן 2–3 מנדטים → 7.7–13.7%; שארית מעטפות כפולות ימנית של +1–1.5 מנדטים (הצעת גראק, <b>לא מאומתת</b>) → P(ימין) ~7–10%. שוק ה״רוב הקואליציוני״ (~15.5%) בצד הגבוה. ההערכה הכנה: טווח <b>8–11%</b>, לא נקודה.</div>
 
   <div class="cardbox" style="overflow-x:auto;margin-top:14px">
   <table class="model-table">
@@ -410,20 +417,29 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
     var st=document.getElementById('stamp'); if(st)st.textContent=ilDate(d.updated_at);
     var mc=d.mc&&d.mc.mc;
     if(mc){
-      var yes=Math.round(mc.p_any_61*100), no=100-yes;
-      set('pct',no+'%');
-      var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-mc.p_any_61)).toFixed(2));
-      set('chipR','~'+Math.round(mc.p_right_61*100)+'%');
-      set('chipC','~'+Math.round(mc.p_center_61*100)+'%');
-      set('pAnyText',yes+'%');
-      set('mcR',(mc.p_right_61*100).toFixed(1)+'%');
-      set('mcC',(mc.p_center_61*100).toFixed(1)+'%');
-      set('mcA',(mc.p_any_61*100).toFixed(1)+'%');
-      set('mcExp',mc.exp_seats.right+' · '+mc.exp_seats.center+' · '+mc.exp_seats.arab);
-      set('mcThresh','עמך ישראל '+Math.round(mc.threshold_pass.winter*100)+'% · המילואימניקים '+Math.round(mc.threshold_pass.miluim*100)+'%');
+      var MC={all:mc,no14:d.mc.exCh14,'no14+i24':d.mc.exCh14I24};
+      window.renderMc=function(m){ if(!m)return;
+        var yes=Math.round(m.p_any_61*100), no=100-yes;
+        set('pct',no+'%');
+        var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-m.p_any_61)).toFixed(2));
+        set('chipR','~'+Math.round(m.p_right_61*100)+'%');
+        set('chipC','~'+Math.round(m.p_center_61*100)+'%');
+        set('pAnyText',yes+'%');
+        set('mcR',(m.p_right_61*100).toFixed(1)+'%');
+        set('mcC',(m.p_center_61*100).toFixed(1)+'%');
+        set('mcA',(m.p_any_61*100).toFixed(1)+'%');
+        set('mcExp',m.exp_seats.right+' · '+m.exp_seats.center+' · '+m.exp_seats.arab);
+        set('mcThresh','עמך ישראל '+Math.round(m.threshold_pass.winter*100)+'% · המילואימניקים '+Math.round(m.threshold_pass.miluim*100)+'%');
+        set('bmCoalMc',(m.p_any_61*100).toFixed(1)+'%');
+        set('bmHungMc',(100-m.p_any_61*100).toFixed(1)+'%');
+      };
       set('mcStamp',ilDate(d.mc.updated_at));
-      set('bmCoalMc',(mc.p_any_61*100).toFixed(1)+'%');
-      set('bmHungMc',(100-mc.p_any_61*100).toFixed(1)+'%');
+      renderMc(mc);
+      var mt=document.getElementById('mixToggle');
+      if(mt) mt.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+        mt.querySelectorAll('button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
+        renderMc(MC[b.dataset.mix]);
+      });
     }
     if(d.benchmark){
       if(d.benchmark.coalitionMajority!=null)set('bmCoal',d.benchmark.coalitionMajority+'%');
