@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>התחזית | כנסת 26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b16; --bg2:#0b1226; --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.09); --txt:#eef2ff; --dim:#9aa7c7; --faint:#5f6b8c;
+  --right:#4d8dff; --center:#12c2b3; --arab:#3ecf8e; --warn:#ffb454; --bad:#ff6b81; --gold:#ffd166;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Heebo',system-ui,sans-serif; color:var(--txt); background:var(--bg);
+  background-image:
+    radial-gradient(1200px 600px at 85% -10%, rgba(77,141,255,.14), transparent 60%),
+    radial-gradient(900px 500px at 10% 0%, rgba(18,194,179,.10), transparent 55%),
+    radial-gradient(700px 700px at 50% 110%, rgba(255,209,102,.06), transparent 60%);
+  min-height:100vh; line-height:1.55;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 80px}
+header.top{display:flex;justify-content:space-between;align-items:baseline;padding:26px 0 8px;flex-wrap:wrap;gap:6px}
+.logo{font-size:15px;font-weight:800;letter-spacing:.14em;color:var(--dim)}
+.logo b{color:var(--txt)}
+.stamp{font-size:12.5px;color:var(--faint)}
+/* HERO */
+.hero{padding:44px 0 26px;text-align:center}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+h1.q{font-size:clamp(26px,5vw,44px);font-weight:900;line-height:1.2;margin-bottom:34px}
+h1.q em{font-style:normal;background:linear-gradient(90deg,var(--gold),#ff9d5c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.verdict{display:flex;justify-content:center;align-items:center;gap:clamp(20px,5vw,64px);flex-wrap:wrap}
+.ring{position:relative;width:min(300px,72vw);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .track{stroke:rgba(255,255,255,.07)}
+.ring .val{stroke:url(#gradNo);stroke-linecap:round;filter:drop-shadow(0 0 14px rgba(18,194,179,.45))}
+.ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .pct{font-size:clamp(52px,9vw,74px);font-weight:900;line-height:1;background:linear-gradient(180deg,#fff,#9fd9d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ring .lbl{font-size:15px;color:var(--dim);font-weight:700;margin-top:6px}
+.verdict-txt{max-width:340px;text-align:right}
+.verdict-txt .big{font-size:clamp(22px,3.4vw,30px);font-weight:900;line-height:1.3;margin-bottom:12px}
+.verdict-txt p{font-size:14.5px;color:var(--dim)}
+.chips{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700}
+.chip b{font-size:16px;margin-inline-start:6px}
+.chip.c-right b{color:var(--right)} .chip.c-center b{color:var(--center)}
+.band{margin:26px auto 0;max-width:640px}
+.band .bl{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-bottom:6px}
+.band .track2{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.06)}
+.band .rng{position:absolute;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,rgba(255,180,84,.25),rgba(255,180,84,.65))}
+.band .pt{position:absolute;top:-4px;width:3px;height:16px;border-radius:2px;background:var(--gold);box-shadow:0 0 10px rgba(255,209,102,.8)}
+.band .cap{font-size:12.5px;color:var(--faint);margin-top:8px;text-align:center}
+/* SECTIONS */
+section{margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.sec-num{font-size:13px;font-weight:800;color:var(--faint);letter-spacing:.1em}
+h2{font-size:clamp(20px,3.4vw,27px);font-weight:900}
+.sec-sub{font-size:13.5px;color:var(--dim)}
+/* bloc bars */
+.blocs{display:grid;gap:14px}
+.bloc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.bloc .brow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:4px}
+.bloc .bname{font-weight:800;font-size:16px}
+.bloc .bval{font-size:13px;color:var(--dim)}
+.bloc .bval b{font-size:20px;color:var(--txt)}
+.btrack{position:relative;height:14px;border-radius:99px;background:rgba(255,255,255,.05)}
+.bfill{position:absolute;top:0;bottom:0;right:0;border-radius:99px}
+.b61{position:absolute;top:-7px;bottom:-7px;width:2px;background:var(--gold)}
+.b61 span{position:absolute;top:-19px;right:-12px;font-size:11px;font-weight:800;color:var(--gold)}
+.brange{position:absolute;top:3px;bottom:3px;border-radius:99px;background:rgba(255,255,255,.13)}
+.bnote{font-size:12px;color:var(--faint);margin-top:8px}
+/* model */
+.stack{display:flex;height:34px;border-radius:12px;overflow:hidden;margin-bottom:22px;border:1px solid var(--line)}
+.stack div{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0a0f1e;white-space:nowrap;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.model-table th{text-align:right;font-size:12px;color:var(--faint);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line)}
+.model-table td{padding:12px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+.model-table tr:last-child td{border-bottom:none}
+.model-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.wpill{display:inline-block;min-width:44px;text-align:center;font-weight:800;border-radius:8px;padding:2px 8px;font-size:13px}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;border-radius:6px;padding:1.5px 7px;margin-inline-start:6px;vertical-align:middle}
+.tag.d{background:rgba(18,194,179,.15);color:var(--center)} .tag.j{background:rgba(255,180,84,.15);color:var(--warn)}
+.cardbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 8px}
+/* polls */
+.polls-table th,.sect-table th{text-align:right;font-size:12px;color:var(--faint);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line)}
+.polls-table td,.sect-table td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px}
+.polls-table a{color:var(--right);text-decoration:none}
+.polls-table a:hover{text-decoration:underline}
+.outl{color:var(--warn);font-weight:800}
+td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
+.win61{color:var(--bad);font-weight:800}
+.up{color:var(--arab);font-weight:800} .down{color:var(--bad);font-weight:800}
+/* timeline */
+.tl{display:grid;gap:0}
+.tlrow{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px}
+.tlrow:last-child{border-bottom:none}
+.tlrow .t{font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+.tlrow .d{color:var(--dim)} .tlrow .d b{color:var(--txt);font-weight:700}
+/* turnout */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.tstat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.tstat .h{font-size:12.5px;color:var(--faint);margin-bottom:6px}
+.tstat .v{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums}
+.tstat .s{font-size:12px;color:var(--center);font-weight:700;margin-top:4px}
+/* notes */
+.notes{display:grid;gap:10px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;color:var(--dim)}
+.note b{color:var(--txt)}
+/* disclaimer */
+.legal{margin-top:64px;border:1px solid rgba(255,180,84,.4);background:rgba(255,180,84,.06);border-radius:20px;padding:24px 26px}
+.legal h3{color:var(--warn);font-size:17px;font-weight:900;margin-bottom:12px}
+.legal p,.legal li{font-size:13.5px;color:#e8ddc8}
+.legal ul{padding-inline-start:20px;display:grid;gap:8px;margin-top:8px}
+.legal .law{font-weight:800;color:var(--warn)}
+footer{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);display:grid;gap:6px}
+footer a{color:var(--dim)}
+.srcs{display:flex;flex-wrap:wrap;gap:6px 16px}
+.update{margin-top:24px;background:rgba(18,194,179,.07);border:1px solid rgba(18,194,179,.3);border-radius:16px;padding:16px 20px;font-size:13.5px;color:#c9ecea}
+.update b{color:var(--center)}
+.tgrid3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:640px){
+.tgrid3{grid-template-columns:1fr}
+  .verdict{flex-direction:column}
+  .verdict-txt{text-align:center}
+  .chips{justify-content:center}
+  .model-table .why{display:none}
+  .tlrow{grid-template-columns:52px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="logo">התחזית <b>×</b> כנסת 26</div>
+  <div class="stamp">עודכן: <span id="stamp">27.10.2026, 15:20</span> · שווקים והצבעה מתעדכנים אוטומטית כל 5 דק׳ · <span style="color:var(--center)">● LIVE</span></div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="kicker">מודל תחזית משוקלל · יום הבחירות</div>
+  <h1 class="q">האם אחד הגושים מגיע ל־<em>61+</em> מנדטים?</h1>
+  <div class="verdict">
+    <div class="ring">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="gradNo" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#12c2b3"/><stop offset="100%" stop-color="#4d8dff"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="100" cy="100" r="86" fill="none" stroke-width="14"/>
+        <circle class="val" cx="100" cy="100" r="86" fill="none" stroke-width="14"
+          stroke-dasharray="540.35" stroke-dashoffset="48.63" id="ringVal"/>
+      </svg>
+      <div class="center">
+        <div class="pct" id="pct" data-target="91">91%</div>
+        <div class="lbl">שאף גוש לא יגיע ל־61</div>
+      </div>
+    </div>
+    <div class="verdict-txt">
+      <div class="big">התשובה של המודל: <u>ככל הנראה לא.</u></div>
+      <p>סיכוי מוערך של כ־<b id="pAnyText">9%</b> בלבד שאחד משני הגושים יגיע לרוב של 61 מנדטים לבדו. הפיצול המוערך:</p>
+      <div class="chips">
+        <div class="chip c-right">גוש הימין 61+ <b id="chipR">~4%</b></div>
+        <div class="chip c-center">גוש המרכז 61+ <b id="chipC">~5%</b></div>
+      </div>
+      <div class="band">
+        <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>4% – 16%</span></div>
+        <div class="track2">
+          <div class="rng" style="right:4%;width:12%"></div>
+          <div class="pt" style="right:9%"></div>
+        </div>
+        <div class="cap">ההערכה אינה סקר. פירוט ההסתייגויות והדיסקליימר החוקי בתחתית העמוד.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BLOCS ============ -->
+<section id="blocs">
+  <div class="sec-head"><span class="sec-num">01</span><h2>איפה הגושים עומדים</h2><span class="sec-sub">ממוצע 6 הסקרים האחרונים (20–23.10) · 120 מנדטים</span></div>
+  <div class="blocs">
+    <div class="bloc">
+      <div class="brow"><span class="bname">גוש הימין <span style="color:var(--faint);font-weight:500;font-size:12.5px">ליכוד · ש״ס · יהדות התורה · ציונות דתית · עוצמה</span></span><span class="bval"><b>52.5</b> בממוצע · טווח 48–62</span></div>
+      <div class="btrack">
+        <div class="brange" style="right:40%;width:11.7%"></div>
+        <div class="bfill" style="width:43.75%;background:linear-gradient(270deg,var(--right),#2b5cb8)"></div>
+        <div class="b61" style="right:50.83%"><span>61</span></div>
+      </div>
+      <div class="bnote">הטווח הרחב נובע מסקר חריג אחד (ערוץ 14: 62). בחמישה מששת הסקרים הגוש על 48–55. פילוח ההצבעה של היום מחליש את הנתיב הזה: הצבעה חרדית נמוכה מ־2022 ב־4.7 נק׳ (צפי לסוף היום).</div>
+    </div>
+    <div class="bloc">
+      <div class="brow"><span class="bname">גוש המרכז־שינוי <span style="color:var(--faint);font-weight:500;font-size:12.5px">ישר! · ביחד · הדמוקרטים · ישראל ביתנו</span></span><span class="bval"><b>51.2</b> בממוצע · טווח 44–56</span></div>
+      <div class="btrack">
+        <div class="brange" style="right:36.7%;width:10%"></div>
+        <div class="bfill" style="width:42.7%;background:linear-gradient(270deg,var(--center),#0a8f84)"></div>
+        <div class="b61" style="right:50.83%"><span>61</span></div>
+      </div>
+      <div class="bnote">אף סקר לא נתן לגוש יותר מ־56. הצבעה שיאית במעוזי מרכז־שמאל (+11.6 נק׳ מול 2022 בצפי לסוף היום) מחזקת את הגוש — אבל גם כך חסרים ~5–10 מנדטים ל־61.</div>
+    </div>
+    <div class="bloc">
+      <div class="brow"><span class="bname">המפלגות הערביות <span style="color:var(--faint);font-weight:500;font-size:12.5px">המשותפת · רע״ם</span></span><span class="bval"><b>14.3</b> בממוצע · טווח 14–16</span></div>
+      <div class="btrack">
+        <div class="bfill" style="width:11.9%;background:linear-gradient(270deg,var(--arab),#1f8f5a)"></div>
+        <div class="b61" style="right:50.83%"><span>61</span></div>
+      </div>
+      <div class="bnote">מחוץ לשני הגושים. הצבעה ערבית בצפי +5.7 נק׳ מול 2022 — עשויה להוסיף מנדטים מחוץ לשני הגושים ולהקטין עוד את סיכויי ה־61.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODEL ============ -->
+<section id="model">
+  <div class="sec-head"><span class="sec-num">02</span><h2>המודל: פרמטרים ומשקלים</h2><span class="sec-sub">כל פרמטר תורם הערכה משלו; המשוקלל הוא התחזית</span></div>
+  <div class="stack">
+    <div style="width:30%;background:#4d8dff">30%</div>
+    <div style="width:22%;background:#12c2b3">22%</div>
+    <div style="width:13%;background:#ffd166">13%</div>
+    <div style="width:20%;background:#b48cff">20%</div>
+    <div style="width:15%;background:#ff9d5c">15%</div>
+  </div>
+  <div class="cardbox" style="overflow-x:auto">
+  <table class="model-table">
+    <thead><tr><th>פרמטר</th><th>מה הנתון אומר (27.10, עד ~15:15)</th><th class="num">הערכת 61+</th><th class="num">משקל</th><th class="why">למה המשקל הזה</th></tr></thead>
+    <tbody>
+    <tr>
+      <td><b>סקרי הערוצים</b> (6 סקרים, 20–23.10)<span class="tag d">נתון</span></td>
+      <td>אף גוש לא מתקרב ל־61: ימין 48–62 (ממוצע 52.5), מרכז 44–56 (ממוצע 51.2). 5 מתוך 6 סקרים: אף גוש לא מעל 56.</td>
+      <td class="num">10%<span class="tag j">שיפוט</span></td>
+      <td class="num"><span class="wpill" style="background:#4d8dff">28%</span></td>
+      <td class="why">הבסיס הסטטיסטי היציב היחיד. פער של 8–10 מנדטים מהממוצע גדול אפילו על טעות דגימה אופיינית, אבל סקרים בישראל פספסו נדנדות מאוחרות בעבר.</td>
+    </tr>
+    <tr>
+      <td><b>שוק ״רוב קואליציוני״</b> — Polymarket<span class="tag d">נתון</span></td>
+      <td>״איזושהי קואליציה עם רוב״: <b>7.5%</b> (ירד מ־11.5% בבוקר). ״כנסת תקועה״: 34%.</td>
+      <td class="num"><span id="estCoal">7.5%</span><span class="tag d">נתון</span></td>
+      <td class="num"><span class="wpill" style="background:#12c2b3">20%</span></td>
+      <td class="why">השוק הזה מתמחר בדיוק את שאלת ה־61+, ולכן משקל גבוה — אבל הוא דליל (נפח נמוך) וסוחר יחיד יכול להזיזו, לכן לא יותר מ־~רבע.</td>
+    </tr>
+    <tr>
+      <td><b>שוק ראשות הממשלה + מפלגה מנצחת</b> — Polymarket<span class="tag d">נתון</span></td>
+      <td>איזנקוט 64.6% מול נתניהו 22.5%; ישר! 75.5% כמפלגה הגדולה (נפח 24ש׳ ~$3.5M, הנזיל ביותר). כיוון: חיזוק גוש המרכז, אבל זכייה במפלגה הגדולה ≠ 61 מנדטים.</td>
+      <td class="num">12%<span class="tag j">שיפוט</span></td>
+      <td class="num"><span class="wpill" style="background:#ffd166">12%</span></td>
+      <td class="why">נזיל ואינפורמטיבי על מי ירכיב ממשלה, אבל עקיף לשאלת ה־61+ עצמה — לכן משקל נמוך־בינוני.</td>
+    </tr>
+    <tr>
+      <td><b>אחוזי הצבעה + פילוח מגזרי</b> — ועדת הבחירות / Votes26<span class="tag d">נתון</span></td>
+      <td>ארצי: 44.9% ב־14:00 (שיא מאז 1973), צפי סוף־יום 76.9%. בפילוח: מעוזי מרכז־שמאל <b>+11.6</b> מול 2022, חילונים +7.9; חרדים <b>−4.7</b>, מעוזי ימין רק +1.8 — החלשת נתיב ה־61 של הימין.</td>
+      <td class="num"><span id="estTurn">7%</span><span class="tag j">שיפוט</span></td>
+      <td class="num"><span class="wpill" style="background:#b48cff">18%</span></td>
+      <td class="why">הנתון הרשמי היחיד מיום הבחירות עצמו, עם פירוק מגזרי אמיתי (דיווחי קלפיות 11:58–12:29) — לכן משקל גבוה יחסית. ההערכה (7%) משקפת שהכיוון פועל בעיקר נגד רוב ימין; הפילוח עוד יתעדכן ב־16:00/18:00.</td>
+    </tr>
+    <tr>
+      <td><b>אחוז הצבעה במגזר הערבי</b> — ועדת הבחירות / Votes26<span class="tag d">נתון</span></td>
+      <td>המגזר הערבי: <b id="arabNowCell">24.6%</b> עד הצהריים, צפי סוף־יום <b id="arabEstCell">62.8%</b> מול 52.7% ב־2022 (<b id="arabDeltaCell">+10.1</b> נק׳) — עלייה חדה מתמשכת מהבוקר.</td>
+      <td class="num"><span id="estArab">14%</span><span class="tag j">שיפוט</span></td>
+      <td class="num"><span class="wpill" style="background:#7bd88f">10%</span></td>
+      <td class="why">מעקב ייעודי: עליית הצבעה ערבית מחזקת את הרשימות הערביות ומחלישה את נתיב ה־61 של הימין. כלל שיפוט גלוי: 10% בסיס + 0.4 נק׳ לכל נקודת עלייה בצפי מול 2022 (רצפה 4%, תקרה 20%). מתעדכן עם כל פרסום מגזרי של הוועדה.</td>
+    </tr>
+    <tr>
+      <td><b>איתותים משלימים</b> — Kalshi, גוגל טרנדס, מט״ח/מניות<span class="tag d">נתון</span></td>
+      <td>Kalshi מתכנס עם פולימרקט (פער ~4 נק׳ קבוע, בלי סטיית כיוון). טרנדס: עניין שגרתי בבחירות, בלי חריגה. הבורסה בת״א סגורה; שקל/דולר 3.078, בלי תנועה חריגה.</td>
+      <td class="num">10%<span class="tag j">נייטרלי</span></td>
+      <td class="num"><span class="wpill" style="background:#ff9d5c">12%</span></td>
+      <td class="why">משמשים בקרת־שפיות (בדיקת סטיות) יותר מאשר אות עצמאי; משקל נמוך.</td>
+    </tr>
+    <tr style="border-top:2px solid var(--line)">
+      <td><b>תחזית משוקללת</b></td>
+      <td id="formula">0.28×10 + 0.20×15 + 0.12×12 + 0.18×8.5 + 0.10×14 + 0.12×10</td>
+      <td class="num"><b style="color:var(--gold);font-size:16px" id="estTotal">~9%</b></td>
+      <td class="num">100%</td>
+      <td class="why">כלומר: ~91% שאף גוש לא מגיע ל־61+. פיצול: ימין ~4%, מרכז ~5%.</td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ TURNOUT / SECTORS ============ -->
+<section id="turnout">
+  <div class="sec-head"><span class="sec-num">03</span><h2>אחוזי הצבעה: שיא היסטורי + פילוח מגזרי</h2><span class="sec-sub">ועדת הבחירות המרכזית · עיבוד ופילוח: Votes26 (עמוד ההצבעה בלבד)</span></div>
+  <div class="tgrid">
+    <div class="tstat"><div class="h">10:00</div><div class="v">16.7%</div><div class="s">הגבוה מאז 1981</div></div>
+    <div class="tstat"><div class="h">12:00</div><div class="v">31.5%</div><div class="s">מול 28.4% ב־2022 · שיא מאז 1977</div></div>
+    <div class="tstat"><div class="h">14:00</div><div class="v" id="tNow">44.9%</div><div class="s">מול 38.9% ב־2022 · שיא מאז 1973</div></div>
+    <div class="tstat"><div class="h">צפי לסוף היום</div><div class="v" id="tEst">76.9%</div><div class="s" id="tRange">טווח 72.9–81.0 · 2022: 70.6%</div></div>
+  </div>
+  <div class="cardbox" style="overflow-x:auto">
+  <table class="sect-table">
+    <thead><tr><th>מגזר</th><th class="num">עד הצהריים (2026)</th><th class="num">מול 2022 באותה שעה*</th><th class="num">צפי סוף־יום 2026</th><th class="num">מול סוף־יום 2022</th><th>קריאה</th></tr></thead>
+    <tbody>
+      <tr><td><b>מעוזי מרכז־שמאל</b></td><td class="num">33.7%</td><td class="num up">+4.9</td><td class="num">81.6%</td><td class="num up">+11.6</td><td class="up">זינוק חד לטובת גוש המרכז</td></tr>
+      <tr><td><b>חילונים</b></td><td class="num">30.0%</td><td class="num up">+3.4</td><td class="num">72.6%</td><td class="num up">+7.9</td><td class="up">מחזק מרכז</td></tr>
+      <tr><td><b>בדואים בנגב</b></td><td class="num">31.6%</td><td class="num up">+10.7</td><td class="num">76.7%</td><td class="num up">~+10</td><td class="up">חריג חד; בעיקר רע״ם</td></tr>
+      <tr><td><b>ערבים</b></td><td class="num">24.1%</td><td class="num up">+2.4</td><td class="num">58.5%</td><td class="num up">+5.7</td><td class="up">מחזק את הרשימות הערביות</td></tr>
+      <tr><td><b>יהודה ושומרון</b></td><td class="num">32.3%</td><td class="num up">+2.3</td><td class="num">78.3%</td><td class="num up">+5.4</td><td class="up">מחזק ימין (מתונות)</td></tr>
+      <tr><td><b>דתיים־לאומיים</b></td><td class="num">32.8%</td><td class="num up">+2.1</td><td class="num">79.6%</td><td class="num up">+4.7</td><td class="up">מחזק ימין (מתונות)</td></tr>
+      <tr><td><b>יוצאי ברה״מ</b></td><td class="num">25.8%</td><td class="num up">+4.6</td><td class="num">62.5%</td><td class="num up">~+4</td><td>מעורב</td></tr>
+      <tr><td><b>מעוזי ימין</b></td><td class="num">29.4%</td><td class="num up">+0.9</td><td class="num">71.4%</td><td class="num up">+1.8</td><td>עלייה מתונה בלבד</td></tr>
+      <tr><td><b>חרדים</b></td><td class="num">28.3%</td><td class="num down">−1.8</td><td class="num">68.7%</td><td class="num down">−4.7</td><td class="down">ירידה חדה — פוגע בש״ס ויהדות התורה</td></tr>
+      <tr><td><b>דרוזים</b></td><td class="num">16.5%</td><td class="num down">−4.0</td><td class="num">39.9%</td><td class="num down">~−4</td><td class="down">ירידה חדה</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:12px"><b>הסיפור של הצהריים:</b> מעוזי מרכז־שמאל בזינוק של +11.6 נק׳ (צפי) מול 2022, ואילו ההצבעה החרדית בירידה של −4.7. הכיוון נגד רוב ימין ומחזק את המרכז — אבל גם עם הזינוק, ממוצע הסקרים של המרכז (51.2) רחוק ~10 מנדטים מ־61. * נתוני 2022 לפי שעה הם הערכה של Votes26 (הוועדה לא פרסמה אז נתון שעתי מגזרי). הפילוח מבוסס דיווחי קלפיות 11:58–12:29 ויתעדכן ב־16:00/18:00. מקור: <a style="color:var(--right)" href="https://votes26.com/?v=turnout">votes26.com/?v=turnout</a>.</div>
+
+  <div class="cardbox" style="margin-top:14px;border:1px solid var(--gold)">
+    <h3 style="margin:4px 6px 10px;font-size:18px;color:var(--gold)">מבט מיועד: ההצבעה במגזר הערבי</h3>
+    <div class="tgrid tgrid3">
+      <div class="tstat"><div class="h">עד הצהריים (13:13)</div><div class="v" id="arabNow">24.6%</div><div class="s">מהפילוח המגזרי האחרון של הוועדה</div></div>
+      <div class="tstat"><div class="h">צפי סוף־יום</div><div class="v" id="arabEst">62.8%</div><div class="s">מול 52.7% ב־2022</div></div>
+      <div class="tstat"><div class="h">פער מול 2022</div><div class="v" id="arabDelta" style="color:var(--center)">+10.1</div><div class="s">נקודות אחוז (צפי)</div></div>
+    </div>
+    <div class="note" style="margin-top:10px"><b>למה זה חשוב לשאלת ה־61+:</b> כל נקודת הצבעה ערבית נוספת היא כמעט כולה קולות לרשימות הערביות (רע״ם / חד״ש־תע״ל / בל״ד) — קולות שלא הולכים למפלגות גוש הימין. עלייה של ~+10 נק׳ כפי שמצופה כעת מחזקת את הרשימות הערביות, מקטינה את פלח המנדטים של הימין, ומקרבת מעט את המחנה המתחרה — אבל בעיקר מרחיקה את הימין מ־61. ואם בל״ד מתקרבת לסף החסימה, כל נקודה יכולה להזיז בין ~0 ל־4 מנדטים. המודל מתמחר זאת בפרמטר ייעודי (משקל 10%, כלל שיפוט גלוי בטבלת המודל). הפילוח יתעדכן עם כל פרסום מגזרי של הוועדה (16:00 / 18:00 / 20:00). שים לב: זהו נתון הצבעה בלבד — לא תוצאות ולא מדגם.</div>
+  </div>
+</section>
+
+<!-- ============ POLLS DATA ============ -->
+<section id="polls">
+  <div class="sec-head"><span class="sec-num">04</span><h2>הנתונים הגולמיים: ששת הסקרים</h2><span class="sec-sub">מנדטים לפי גוש · מקור מקושר · <b style="color:var(--warn)">סקרים אלה אינם עדכניים</b></span></div>
+  <div class="cardbox" style="overflow-x:auto">
+  <table class="polls-table">
+    <thead><tr><th>סקר</th><th>תאריך</th><th class="num">ימין</th><th class="num">מרכז</th><th class="num">ערביות</th><th class="num">אחרים (מתחת לאחוז)</th><th>מקור</th></tr></thead>
+    <tbody>
+      <tr><td><b>חדשות 12</b></td><td>23.10</td><td class="num">50</td><td class="num">56</td><td class="num">14</td><td class="num">0</td><td><a href="https://www.mako.co.il/news-israel-elections/2026/Article-8ea5e45ec2961a1027.htm">mako</a></td></tr>
+      <tr><td><b>חדשות 13</b></td><td>23.10</td><td class="num">50</td><td class="num">54</td><td class="num">16</td><td class="num">0</td><td><a href="https://13tv.co.il/item/news/politics/politics/survey-905415900/">13tv</a></td></tr>
+      <tr><td><b>ערוץ 14</b></td><td>22.10</td><td class="num win61">62 ⚑</td><td class="num">44</td><td class="num">14</td><td class="num">0</td><td><a href="https://www.c14.co.il/article/1750553">c14</a></td></tr>
+      <tr><td><b>כאן 11</b></td><td>23.10</td><td class="num">50</td><td class="num">52</td><td class="num">14</td><td class="num">4 (מילואימניקים)</td><td><a href="https://www.kan.org.il/content/kan-news/politic/1112122/">kan</a></td></tr>
+      <tr><td><b>i24NEWS</b></td><td>23.10</td><td class="num">55</td><td class="num">47</td><td class="num">14</td><td class="num">4 (וינטר)</td><td><a href="https://www.i24news.tv/he/news/israel-elections-2026/polls/artc-07d162ea">i24</a></td></tr>
+      <tr><td><b>וואלה</b></td><td>20.10</td><td class="num">48</td><td class="num">54</td><td class="num">14</td><td class="num">4 (מילואימניקים)</td><td><a href="https://www.walla.co.il/news/politics/383958175">walla</a></td></tr>
+      <tr style="border-top:2px solid var(--line)"><td><b>ממוצע</b></td><td>—</td><td class="num"><b>52.5</b></td><td class="num"><b>51.2</b></td><td class="num"><b>14.3</b></td><td class="num">—</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:12px"><span class="outl">⚑</span> סקר ערוץ 14 הוא <b>הסקר היחיד</b> שנותן 61+ לאחד הגושים (62 לימין). הוא חריג ביחס לחמישת האחרים — עובדה המוצגת כאן כנתון, בלי פרשנות על הטיה.</div>
+</section>
+
+<!-- ============ MARKETS ============ -->
+<section id="markets">
+  <div class="sec-head"><span class="sec-num">05</span><h2>שוקי ההימורים במהלך היום</h2><span class="sec-sub">Polymarket + Kalshi · ציבורי בלבד · אזהרת שוק דליל</span></div>
+  <div class="cardbox">
+  <div class="tl" id="tl">
+    <div class="tlrow"><div class="t">11:24</div><div class="d">פתיחת מעקב: איזנקוט <b>54.9%</b>, נתניהו 27.5%, בנט 9.5% · ״רוב קואליציוני״ <b>11.5%</b> · כנסת תקועה 37%</div></div>
+    <div class="tlrow"><div class="t">12:44</div><div class="d">איזנקוט <b>61.2%</b> (+6.3 ב־80 דק׳; כסף זז מבנט לאיזנקוט) · גוש עם יותר מנדטים: 45% ← 40.5%</div></div>
+    <div class="tlrow"><div class="t">12:59</div><div class="d">איזנקוט <b>64.2%</b> · ״רוב קואליציוני״ יורד ל־<b>7.5%</b> · ליכוד מתחת ל־20 מנדטים: 33.6%</div></div>
+    <div class="tlrow"><div class="t">13:15</div><div class="d">תיקון: איזנקוט 60.2% (−3.9), בנט 8.5% — נראה כרעש של סוחר יחיד</div></div>
+    <div class="tlrow"><div class="t">13:45</div><div class="d"><b>גל מכירות על נתניהו:</b> ~$50k ״לא״ מ־4 ארנקים ב־11 דק׳ · המחיר כמעט לא זז (השוק ספג)</div></div>
+    <div class="tlrow"><div class="t">14:16</div><div class="d">עוד ~$18.5k ״לא״ על נתניהו · נפח נתניהו +$244k ב־30 דק׳ (~80% מנפח השוק)</div></div>
+    <div class="tlrow"><div class="t">14:47</div><div class="d">המחיר מתחיל לזוז: נתניהו <b>24.5%</b> (−3 ב־90 דק׳), איזנקוט 64.1% · ישר! 74.5%</div></div>
+    <div class="tlrow"><div class="t">15:06</div><div class="d">נתניהו <b>22.5%</b> (ירידה רביעית ברצף) · איזנקוט <b>64.6%</b> · ישר! <b>75.5%</b> · Kalshi: 57/22/17 — ללא סטיה</div></div>
+  </div>
+  </div>
+  <div class="note" style="margin-top:12px"><b>אזהרת שוק דליל:</b> מלבד שוק ראשות הממשלה (~$3.5M ב־24ש׳), שאר השווקים דלילים (אלפי־עשרות אלפי דולרים) וסוחר יחיד יכול להזיזם. תנועה חדה היא רמז, לא הוכחה למידע פנים. נתוני הימורים אינם סקר — ראו דיסקליימר חוקי.</div>
+</section>
+
+<!-- ============ WHAT CHANGES IT ============ -->
+<section id="changes">
+  <div class="sec-head"><span class="sec-num">06</span><h2>מה ישנה את התחזית</h2></div>
+  <div class="notes">
+    <div class="note"><b>מדגמי הערוצים (22:00):</b> העדכון המשמעותי הראשון. מדגם שמראה גוש על 59+ יעלה את ההסתברות ל־61+ באופן מיידי; המודל יעודכן עם פרסום המדגמים.</div>
+    <div class="note"><b>עדכון הפילוח המגזרי (16:00 / 18:00 / 20:00):</b> אם הפער חרדים−מרכז יתהפך או יעמיק, משקל פרמטר ההצבעה וההערכה ישתנו.</div>
+    <div class="note"><b>תוצאות אמת של קלפיות המדגם:</b> אישור/הפרכה של מדגמי הערוצים בשעות הלילה.</div>
+    <div class="note"><b>סטיית Polymarket–Kalshi</b> או גל עסקאות חד־צדדי חדש בשוק ה־61+ עצמו.</div>
+  </div>
+  <div class="update"><b>תוכנית עדכון:</b> העמוד נבנה רק מנתונים לפני 22:00 (חל איסור חוקי על פרסום מדגמים לפני סגירת הקלפיות). התחזית תעודכן אחרי 22:00 עם מדגמי הערוצים, ושוב עם תוצאות האמת — עם חותמת זמן לכל גרסה.</div>
+</section>
+
+<!-- ============ MORE FACTORS ============ -->
+<section id="factors">
+  <div class="sec-head"><span class="sec-num">07</span><h2>גורמים נוספים שיכולים להזיז את ה־61+</h2><span class="sec-sub">רשימת בקרה מלאה · מה נכנס למודל ומה נשאר תצפית</span></div>
+  <div class="notes">
+    <div class="note"><b>סף החסימה של מפלגות קטנות</b> <span class="tag j">שיפוט</span> — בל״ד, וגם מפלגות קטנות בשני הצדדים, קרובות ל־3.25%. מעבר/נפילה מהסף מזיז ~4 מנדטים בבת אחת ומחלק מחדש מנדטים לכל הגושים. לא מומחר מספרית (אין נתון חי) — נשמר כתצפית שיפוט.</div>
+    <div class="note"><b>הצבעה מגזרית דיפרנציאלית</b> <span class="tag d">נתון</span> — כבר במודל: חרדים (בתוך פרמטר ההצבעה) והמגזר הערבי (פרמטר ייעודי 10%). הדפוס ההפוך (חרדים למעלה, ערבים למטה) מחזק ימין; ההפוך מחזק מרכז.</div>
+    <div class="note"><b>גמישות קואליציונית אחרי הבחירות</b> <span class="tag d">נתון</span> — גם גוש עם 61 על הנייר לא תמיד מרכיב ממשלה (קווים אדומים, ליברמן/רע״ם). שוק ״כנסת תקועה״ ב־Polymarket (~37%) הוא המדד החי, ונכנס לפרמטר האיתותים.</div>
+    <div class="note"><b>מעטפות כפולות</b> <span class="tag j">שיפוט</span> — חיילים, שגרירויות, עצורים: ~5–6 מנדטים בשווי קולות, נספרות רק אחרי תוצאות הקלפיות. היסטורית נוטות מעט לימין/ציונות־דתית.</div>
+    <div class="note"><b>הסכמי עודפים</b> <span class="tag j">שיפוט</span> — זוגות מפלגות שחתמו הסכם עודפים זוכים לעתים במנדט נוסף על חשבון רשימות גדולות; אפקט קטן אבל אמיתי בקצה ה־61.</div>
+    <div class="note"><b>נזילות שוק ומניפולציה</b> <span class="tag j">שיפוט</span> — מלבד שוק ראשות הממשלה, השווקים דלילים; סכום קטן יכול לזייף אות. זו הסיבה שמשקל שוק הקואליציה מוגבל ל־20% ו־Kalshi נשאר בקרת־שפיות בלבד.</div>
+    <div class="note"><b>טעות דגימה מערכתית בסקרים</b> <span class="tag j">שיפוט</span> — סקרים בישראל פספסו נדנדות של 3–5 מנדטים בשבוע האחרון (2021, 2022). הסקרים האחרונים בני 4–7 ימים.</div>
+    <div class="note"><b>מתלבטים בשעות האחרונות</b> <span class="tag j">שיפוט</span> — 8–12% מהמצביעים מחליטים ביום הבחירות; אם הם שבורים מגזרית, ההשפעה מוכפלת.</div>
+    <div class="note"><b>אירועי יום הבחירות</b> <span class="tag j">שיפוט</span> — אירוע ביטחוני, מזג אוויר קיצוני או תקלה במשאל יכולים לשנות הצבעה בשעות האחרונות באופן לא סימטרי בין גושים.</div>
+  </div>
+</section>
+
+<!-- ============ LEGAL ============ -->
+<div class="legal">
+  <h3>⚠️ דיסקליימר והצהרות חוקיות (חובה לקרוא)</h3>
+  <ul>
+    <li><span class="law">זהו לא סקר בחירות.</span> פרויקט זה אינו סקר ואינו מבוסס על שיטות סטטיסטיות מוכרות לעריכת סקרים, ולפיכך <b>אי אפשר להסיק ממנו מסקנות לגבי דפוסי הצבעה או עמדות של הציבור</b> (לפי סעיף 16ה(ד) לחוק הבחירות (דרכי תעמולה), תשי״ט־1959).</li>
+    <li><span class="law">הסקרים המוצגים אינם עדכניים.</span> הסקרים באתר פורסמו ב־20–23.10.2026, לפני תקופת האיסור החוקית. הם מוצגים שוב בציון בולט: <b>אין ללמוד מהם על דפוסי הצבעה או עמדות של הציבור במועד פרסום זה</b> (לפי סעיף 16ה(ח) לחוק).</li>
+    <li><span class="law">נתוני אתרי הימורים אינם סקר.</span> הנתונים מ־Polymarket ו־Kalshi אינם מבוססים על שיטות סטטיסטיות מוכרות, ולפיכך לא ניתן להסיק מהם מסקנות על עמדות הציבור או דפוסי ההצבעה — כנדרש בהנחיית ועדת הבחירות המרכזית (20.10.2026).</li>
+    <li><span class="law">זו לא תעמולת בחירות.</span> הפרויקט אינו קורא להצביע או להימנע מהצבעה למפלגה או מועמד כלשהם, ואינו ממומן על ידי גוף פעיל בבחירות.</li>
+    <li><span class="law">לא ייעוץ.</span> המודל מיועד לניתוח ובידור בלבד. אין לראות בו ייעוץ פיננסי, המלצת הימורים או בסיס להחלטה כלשהי. שוקי הימורים דלילים ועשויים לשקף סוחר בודד.</li>
+    <li><span class="law">אי־ודאות.</span> חלק מהפרמטרים מבוססי שיפוט (מסומנים בעמוד), וכל המשקלים נבחרו בשיטה גלויה המוצגת למעלה. טעינו בעבר ונטעה שוב.</li>
+  </ul>
+</div>
+
+<footer>
+  <div>התחזית × כנסת 26 · מודל ניתוח עצמאי · כל הנתונים ציבוריים ומקושרים למקור</div>
+  <div class="srcs">
+    <a href="https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election">Polymarket</a>
+    <a href="https://kalshi.com">Kalshi</a>
+    <a href="https://votes26.com/?v=turnout">Votes26 (אחוזי הצבעה)</a>
+    <a href="https://www.gov.il/apps/elections/heb/law/LawsSummary.html">תמצית חוקי הבחירות (gov.il)</a>
+    <a href="https://www.israelhayom.co.il/news/law/article/21667242">מכתב ועדת הבחירות (ישראל היום)</a>
+  </div>
+  <div>נבנה ב־27.10.2026 · גרסה 1.0 (לפני 22:00) · יעודכן עם מדגמי הערוצים ותוצאות האמת</div>
+</footer>
+
+</div>
+
+
+<script>
+(function(){
+  function ilTime(d){return new Date(d).toLocaleTimeString('he-IL',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit'});}
+  function ilDate(d){return new Date(d).toLocaleString('he-IL',{timeZone:'Asia/Jerusalem',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+  fetch('/api/data').then(function(r){return r.ok?r.json():null;}).then(function(d){
+    if(!d||!d.model)return;
+    var m=d.model, no=Math.round(m.no61*100), yes=Math.round(m.p_any_61*100);
+    var el=document.getElementById('pct'); if(el){el.textContent=no+'%'; el.dataset.target=no;}
+    var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-m.no61)).toFixed(2));
+    var cr=document.getElementById('chipR'); if(cr)cr.textContent='~'+Math.round(m.p_right_61*100)+'%';
+    var cc=document.getElementById('chipC'); if(cc)cc.textContent='~'+Math.round(m.p_center_61*100)+'%';
+    var ec=document.getElementById('estCoal'); if(ec)ec.textContent=(m.inputs.coalition_est*100).toFixed(1)+'%';
+    var et=document.getElementById('estTurn'); if(et)et.textContent=(m.inputs.turnout_est*100).toFixed(1).replace(/\.0$/,'')+'%';
+    if(m.inputs.arab_est!=null){var ea=document.getElementById('estArab'); if(ea)ea.textContent=(m.inputs.arab_est*100).toFixed(1).replace(/\.0$/,'')+'%';}
+    var f=document.getElementById('formula'); if(f)f.textContent='0.28×'+(m.inputs.polls_est*100)+' + 0.20×'+(m.inputs.coalition_est*100).toFixed(1)+' + 0.12×'+(m.inputs.pm_est*100)+' + 0.18×'+(m.inputs.turnout_est*100).toFixed(1)+' + 0.10×'+(m.inputs.arab_est!=null?(m.inputs.arab_est*100).toFixed(1):'10')+' + 0.12×'+(m.inputs.signals_est*100);
+    var tt=document.getElementById('estTotal'); if(tt)tt.textContent='~'+yes+'%';
+    var pt=document.getElementById('pAnyText'); if(pt)pt.textContent=yes+'%';
+    var st=document.getElementById('stamp'); if(st)st.textContent=ilDate(d.updated_at);
+    if(d.turnout&&d.turnout.national){var n=d.turnout.national;
+      var tn=document.getElementById('tNow'); if(tn)tn.textContent=n.now.toFixed(1)+'%';
+      var te=document.getElementById('tEst'); if(te)te.textContent=n.est.toFixed(1)+'%';
+      var tr=document.getElementById('tRange'); if(tr)tr.textContent='טווח '+n.lo+'–'+n.hi+' · 2022: '+n.prevFinal2022+'%';}
+    if(d.turnout&&d.turnout.arab){var A=d.turnout.arab;
+      var sgn=function(x){return (x>0?'+':'')+(+x).toFixed(1);};
+      var an=document.getElementById('arabNow'); if(an)an.textContent=A.now.toFixed(1)+'%';
+      var ae=document.getElementById('arabEst'); if(ae)ae.textContent=A.est.toFixed(1)+'%';
+      var ad=document.getElementById('arabDelta'); if(ad)ad.textContent=sgn(A.deltaEstVs2022);
+      var an2=document.getElementById('arabNowCell'); if(an2)an2.textContent=A.now.toFixed(1)+'%';
+      var ae2=document.getElementById('arabEstCell'); if(ae2)ae2.textContent=A.est.toFixed(1)+'%';
+      var ad2=document.getElementById('arabDeltaCell'); if(ad2)ad2.textContent=sgn(A.deltaEstVs2022);}
+    var tl=document.getElementById('tl');
+    if(tl&&d.markets&&d.markets.pm&&d.markets.pm.length){
+      var pm=d.markets.pm;
+      var e=pm.find(function(x){return /eizenkot/i.test(x.label);});
+      var b=pm.find(function(x){return /netanyahu/i.test(x.label);});
+      var y=d.markets.winner&&d.markets.winner[0];
+      var row=document.createElement('div'); row.className='tlrow';
+      row.innerHTML='<div class="t">'+ilTime(d.updated_at)+'</div><div class="d"><b>עדכון אוטומטי (live):</b> איזנקוט <b>'+(e?e.price:'—')+'%</b>, נתניהו '+(b?b.price:'—')+'% · ישר! '+(y?y.price:'—')+'% · רוב קואליציוני '+(m.inputs.coalition_est*100).toFixed(1)+'% · Kalshi: '+(d.kalshi&&d.kalshi.length?d.kalshi.slice(0,3).map(function(k){return k.label+' '+k.price;}).join(' / '):'—')+'</div>';
+      tl.prepend(row);
+    }
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
