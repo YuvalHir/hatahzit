@@ -166,7 +166,7 @@ footer a{color:var(--dim)}
 
 <!-- ============ HERO ============ -->
 <div class="hero">
-  <div class="kicker">מודל תחזית משוקלל · יום הבחירות</div>
+  <div class="kicker" id="heroKicker">מודל תחזית משוקלל · יום הבחירות</div>
   <h1 class="q">האם אחד הגושים מגיע ל־<em>61+</em> מנדטים?</h1>
   <div class="verdict">
     <div class="ring">
@@ -186,7 +186,7 @@ footer a{color:var(--dim)}
       </div>
     </div>
     <div class="verdict-txt">
-      <div class="big">התשובה של המודל: <u>ככל הנראה לא.</u></div>
+      <div class="big" id="heroBig">התשובה של המודל: <u>ככל הנראה לא.</u></div>
       <p>סיכוי מוערך של כ־<b id="pAnyText">9%</b> בלבד שאחד משני הגושים יגיע לרוב של 61 מנדטים לבדו. הפיצול המוערך:</p>
       <div class="chips">
         <div class="chip c-right">גוש הימין 61+ <b id="chipR">~4%</b></div>
@@ -195,6 +195,7 @@ footer a{color:var(--dim)}
       <div class="mix-toggle" id="mixToggle">
         <button data-mix="all" class="on">כל 7 הסקרים</button><button data-mix="no14">בלי ערוץ 14</button><button data-mix="no14+i24" title="שני המכונים קשורים לשלמה פילבר (לפי הארץ/ויקיפדיה)">בלי ערוץ 14+i24</button>
       </div>
+      <div class="note" id="epNote" style="display:none;margin-top:10px"></div>
       <div class="band">
         <div class="bl"><span>טווח אי־ודאות (שיפוט)</span><span>8% – 11%</span></div>
         <div class="track2">
@@ -434,8 +435,48 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
   function ilDate(d){return new Date(d).toLocaleString('he-IL',{timeZone:'Asia/Jerusalem',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
   function set(id,v){var e=document.getElementById(id); if(e)e.textContent=v;}
   var MCMAP=null, CURMIX='all';
+
+  function fmtP(x){var p=x*100; return p>=1?Math.round(p)+'%':(p>=0.05?p.toFixed(1)+'%':'<0.1%');}
+  function renderEp(ep){ if(!ep||!ep.all)return;
+    var a=ep.all, no=100-a.p_any*100;
+    var k=document.getElementById('heroKicker'); if(k)k.textContent=ep.headline;
+    var bg=document.getElementById('heroBig'); if(bg)bg.innerHTML='התשובה (אחרי מדגמי 22:00): <u>עדיין ככל הנראה לא.</u>';
+    var mt=document.getElementById('mixToggle'); if(mt)mt.style.display='none';
+    var bd=document.querySelector('.band'); if(bd)bd.style.display='none';
+    set('pct',(no>=99.95?'~100':no.toFixed(1))+'%');
+    var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-a.p_any)).toFixed(2));
+    set('pAnyText',fmtP(a.p_any));
+    set('chipR','~'+fmtP(a.p_right));
+    set('chipC','~'+fmtP(a.p_center));
+    var en=document.getElementById('epNote');
+    if(en){en.style.display='block';
+      en.innerHTML='<b>מדגמי 22:00 — ממוצע '+a.n+' מדגמים, אחרי תיקון:</b> ימין '+a.right.toFixed(1)+' · מרכז־שינוי '+a.center.toFixed(1)+' · ערביות '+a.arab.toFixed(1)+' מתוך 120. פירוט: '+ep.polls.map(function(p){return p.label+' — '+p.seats.right+'/'+p.seats.center+'/'+p.seats.arab;}).join(' · ')+'. <b>רגישות:</b> בלי עכשיו 14 (בית חריג ימני): '+fmtP(ep.no14.p_any)+'. '+ep.rule+'. <b>מדגמי טלוויזיה הם הערכה ראשונית בלבד — לא תוצאות אמת, ועלולים לסטות מהן במספר מנדטים.</b>';
+    }
+    var blocs=document.querySelectorAll('.blocs .bloc');
+    if(blocs.length>=3){
+      var sub=document.querySelector('#blocs .sec-sub'); if(sub)sub.textContent='ממוצע מדגמי הערוצים (22:00) · לא תוצאות אמת · 120 מנדטים';
+      var data=[
+        {corr:a.right, note:'המדגמים נותנים 50 לימין בשלושה בתים; עכשיו 14 (60) מושך את הממוצע הגולמי ל־52.5. אחרי תיקון הטיית מדגמים היסטורית (+2): ~54.5 — עדיין 6.5 מנדטים מתחת ל־61.'},
+        {corr:a.center, note:'ממוצע גולמי 50.25; בלי עכשיו 14: 52.7. אחרי התיקון: ~48.3 — רחוק כ־12 מנדטים מ־61, הסיכוי זניח.'},
+        {corr:a.arab, note:'17–18 במדגמים — יציב מול צפי המודל (18.6). מחוץ לשני הגושים.'}
+      ];
+      var keys=['right','center','arab'];
+      for(var i=0;i<3;i++){var bl=blocs[i], d=data[i], ky=keys[i];
+        var vals=ep.polls.map(function(p){return p.seats[ky];});
+        var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+        var bv=bl.querySelector('.bval'); if(bv)bv.innerHTML='<b>'+d.corr.toFixed(1)+'</b> מתואם · טווח '+mn+'–'+mx;
+        var bf=bl.querySelector('.bfill'); if(bf)bf.style.width=(d.corr/120*100).toFixed(1)+'%';
+        var br=bl.querySelector('.brange'); if(br){br.style.right=(mn/120*100).toFixed(1)+'%';br.style.width=((mx-mn)/120*100).toFixed(1)+'%';}
+        var bn=bl.querySelector('.bnote'); if(bn)bn.textContent=d.note;
+      }
+    }
+  }
   function renderMc(m){ if(!m)return;
     var yes=Math.round(m.p_any_61*100), no=100-yes;
+    var yf=m.p_any_61*100, lo=Math.max(0,yf-3), hi=yf+3;
+    var pt=document.querySelector('.band .pt'); if(pt)pt.style.right=yf.toFixed(1)+'%';
+    var rg=document.querySelector('.band .rng'); if(rg){rg.style.right=lo.toFixed(1)+'%';rg.style.width=(hi-lo).toFixed(1)+'%';}
+    var bl=document.querySelector('.band .bl span:last-child'); if(bl)bl.textContent=Math.round(lo)+'% \u2013 '+Math.round(hi)+'%';
     set('pct',no+'%');
     var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-m.p_any_61)).toFixed(2));
     set('chipR','~'+Math.round(m.p_right_61*100)+'%');
@@ -470,6 +511,7 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
   function renderTimeline(d){
     var tl=document.getElementById('timeline'); if(!tl)return;
     var rows=[];
+    if(d.mc&&d.mc.ep)rows.push({at:d.mc.ep.as_of,text:'פורסמו מדגמי ערוצי הטלוויזיה (22:00) — התחזית עברה למצב מדגמים: P(61+)='+(d.mc.ep.all.p_any*100).toFixed(1)+'% (לא תוצאות אמת)'});
     (d.timeline||[]).forEach(function(e){rows.push({at:e.at,text:e.text});});
     var hist=(d.mc&&d.mc.history)||[];
     for(var i=0;i<hist.length;i++){var h=hist[i];
@@ -494,6 +536,7 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
         set('stampSec',d.mc.sectorsAt?ilTime(d.mc.sectorsAt):'\u2014');
         renderMc(MCMAP[CURMIX]||MCMAP.all);
       }
+      if(d.mc&&d.mc.ep)renderEp(d.mc.ep);
       if(d.benchmark){
         if(d.benchmark.coalitionMajority!=null)set('bmCoal',d.benchmark.coalitionMajority+'%');
         if(d.benchmark.hungParliament!=null)set('bmHung',d.benchmark.hungParliament+'%');
