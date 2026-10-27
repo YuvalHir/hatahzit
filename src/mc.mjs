@@ -114,7 +114,7 @@ function baderOfer(votes, pairs) {
 }
 
 export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
-                        marginSdSeats = 3.0, partyFloorSd = 0.0075, partyRelSd = 0.06,
+                        marginSdSeats = 2.5, partyFloorSd = 0.005, partyRelSd = 0.04,
                         withinBlocRenorm = 0.5,
                         turnoutDiscount = 0.5, turnoutShockSd = 0.3,
                         sectorPopWeights = { general: 0.66, haredi: 0.14, arab: 0.11, judea_samaria: 0.07, christian: 0.01, druze: 0.01 },
@@ -163,17 +163,20 @@ export function runMc({ sectorDeltas = {}, nationalDelta = null, sims = 100000,
     }
     // turnout shock (uncertainty in the update itself)
     const kappa = 1 + randn() * turnoutShockSd;
-    // correlated margin swing (Claude r2 #3): ~3 seats SD on the right-minus-center margin,
-    // replacing the too-tight 2% relative swing. Converted to multipliers on each bloc.
+    // correlated margin swing: SD 2.5 seats on the right-minus-center margin.
+    // Claude r4 #3: the 7-poll mixture already carries ~4.7 seats between-house spread,
+    // so 3.0 double-counted systematic error; total now ~sqrt(4.7^2 + 2.5^2) = 5.3,
+    // near historical final-poll-to-result margin error. Converted to bloc multipliers.
     const rightSeats0 = BLOCS.right.reduce((a, p) => a + (poll.seats[p] || 0), 0);
     const centerSeats0 = BLOCS.center.reduce((a, p) => a + (poll.seats[p] || 0), 0);
     const shift = randn() * marginSdSeats;
     const rightMult = Math.max(0.7, 1 + shift / Math.max(rightSeats0, 1));
     const centerMult = Math.max(0.7, 1 - shift / Math.max(centerSeats0, 1));
     // party noise, ADDITIVE in share units with a sampling-error floor (Gemini r3 #1,
-    // mechanically right): sigma_p = sqrt(floor^2 + (rel * v)^2). A 3% party gets
-    // sigma ~0.77pp (one poll's sampling error), so sub-threshold lists stay alive.
-    // Partial within-bloc renormalization = late consolidation (rho ~ -0.35, Gemini #6).
+    // mechanically right): sigma_p = sqrt(floor^2 + (rel * v)^2). Floor 0.5pp, not
+    // Gemini's 0.75: the poll mixture already encodes cross-house spread, so the floor
+    // covers only final-poll-to-result error (~1 seat/party, themadad 2022 - Grok r4).
+    // Partial within-bloc renormalization = late consolidation (rho ~ -0.35).
     const eps = {};
     for (const p of PARTIES) eps[p] = randn() * Math.sqrt(partyFloorSd * partyFloorSd + (partyRelSd * votes[p]) ** 2);
     for (const bloc of ['right', 'center']) {

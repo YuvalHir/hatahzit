@@ -12,11 +12,15 @@ if (withSectors) {
 }
 const latest = data.reports[data.reports.length - 1];
 const nationalDelta = +(latest.national.est / latest.national.prev - 1).toFixed(4);
-// Gemini r3 #3: intraday pacing deltas firm up toward EOD. Discount ramps 0.50 -> 0.85
-// between 07:00 and 19:00 IST (polls already priced the surge; early-day ratios are noisy).
-const istMins = (Date.now() / 60000 + 120) % 1440; // UTC+2 (IST, winter time)
-const progress = Math.max(0, Math.min(1, (istMins - 7 * 60) / (12 * 60)));
-const turnoutDiscount = Math.min(0.85, 0.5 + 0.35 * progress);
+// Turnout discount (Claude r4 #2 + Grok r4 #2): the poll-pricing discount is ~constant
+// (~0.5-0.6); what firms up is measurement precision, keyed to the DATA timestamp, not
+// wall clock. Back-loaded: 0.50 until 15:00 IST data time, linear to 0.75 by 19:30
+// (0.85-0.90 judged too high - polls permanently priced the surge).
+const dataMins = withSectors && withSectors.at
+  ? (new Date(withSectors.at).getTime() / 60000 + 120) % 1440
+  : (Date.now() / 60000 + 120) % 1440; // UTC+2 (IST, winter time)
+const progress = Math.max(0, Math.min(1, (dataMins - 15 * 60) / (4.5 * 60)));
+const turnoutDiscount = 0.5 + 0.25 * progress;
 const t0 = Date.now();
 const mc = runMc({ sectorDeltas, nationalDelta, sims: 100000, turnoutDiscount });
 console.error('sim time ms:', Date.now() - t0);
