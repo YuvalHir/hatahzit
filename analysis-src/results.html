@@ -1,8 +1,18 @@
 <p class="lead">בקצרה: אף גוש לא הגיע ל-61. גוש נתניהו הוא כ-53 מנדטים, גוש איזנקוט כ-48, והמפלגות הערביות 19. הליכוד היא המפלגה הגדולה. ההצבעה היתה הגבוהה מאז 1999, והמפלגות הערביות קיבלו מספר שיא של מנדטים.</p>
 
+<div class="box" id="live"><p><b>טבלה חיה (קריאה בלבד מנתוני האתר):</b> <span id="live-body">טוען...</span></p>
+<p class="small">מקור: נתוני ספירה חלקית של ועדת הבחירות כפי שהאתר טוען ומעדכן. היא יכולה להיות שונה בקצת מהטבלה הסטטית למטה ומהדיווחים בתקשורת (מנדט אחד על התפר). אם הטעינה נכשלת, הטבלה הסטטית היא הנכונה לזמן הכתיבה.</p></div>
+<script>
+fetch('/api/data').then(r=>r.json()).then(d=>{
+ var c=d&&d.mc&&d.mc.cec; if(!c||!c.seats){throw 0}
+ var rows=Object.keys(c.seats).filter(function(k){return c.seats[k]>0}).sort(function(a,b){return c.seats[b]-c.seats[a]}).map(function(k){return (c.heb[k]||k)+' '+c.seats[k]});
+ var b=c.blocs||{};
+ document.getElementById('live-body').textContent='נכון ל-\u2066'+c.as_of+'\u2069: '+rows.join(', ')+'. גושים: ימין '+b.right+', שינוי '+b.center+', ערבים '+b.arab+'.';
+}).catch(function(){document.getElementById('live-body').textContent='לא זמין כרגע.'});
+</script>
 <h2>מה ידוע עכשיו, ומה עוד לא</h2>
 <div class="box">
-<p><span class="t off">רשמי</span> לפי <a href="https://votes26.bechirot.gov.il/nationalresults?lang=he">אתר ועדת הבחירות</a> ולפי דיווחי התקשורת עליו (<a href="https://www.ynet.co.il/news/article/s1rwd6ktmx">ynet</a>, <a href="https://www.timesofisrael.com/with-85-of-votes-counted-netanyahu-bloc-has-53-seats-eisenkots-48-arab-parties-surge-to-19/">Times of Israel</a>): ספירה של כ-90% מהקולות, ללא המעטפות הכפולות. גוש נתניהו 53, גוש איזנקוט 48, המפלגות הערביות 19.</p>
+<p><span class="t off">רשמי</span> לפי אתר ועדת הבחירות (הקישור הישיר לא נפתח מהשרת שלנו, ולכן אנחנו נשענים על דיווחי התקשורת ועל <a href="https://israelielections.com/2026/results/">מראה של הנתונים</a>) ולפי דיווחי התקשורת עליו (<a href="https://www.ynet.co.il/news/article/s1rwd6ktmx">ynet</a>, <a href="https://www.timesofisrael.com/with-85-of-votes-counted-netanyahu-bloc-has-53-seats-eisenkots-48-arab-parties-surge-to-19/">Times of Israel</a>): ספירה של כ-90% מהקולות, ללא המעטפות הכפולות. גוש נתניהו 53, גוש איזנקוט 48, המפלגות הערביות 19.</p>
 <p><b>מה חסר:</b> המעטפות הכפולות (חיילים, מילואימניקים, מפונים, אסירים, מאושפזים, דיפלומטים). הערכת ועדת הבחירות היתה כ-430 עד 480 אלף (<a href="https://www.timesofisrael.com/with-85-of-votes-counted-netanyahu-bloc-has-53-seats-eisenkots-48-arab-parties-surge-to-19/">Times of Israel</a>), והערכה אחרת, שפורסמה ב-<a href="https://www.globes.co.il/news/article.aspx?did=1001561078">גלובס</a>, דיברה על עד 650 אלף. בעבר הספירה הזאת שינתה את חלוקת המנדטים בדרך כלל במנדט או שניים, והיא נוטה לפגוע במפלגות החרדיות והערביות ולעזור למפלגות הציוניות (<a href="https://www.ynet.co.il/yedioth/article/yokra14941290">ynet</a>). ב-2022 יהדות התורה ירדה אחרי הספירה הזאת מ-8 ל-7 וישראל ביתנו עלתה מ-5 ל-6.</p>
 <p><b>רשימה אחת בגבול:</b> "המילואימניקים" של הנדל וזליכה קיבלה כ-2.63% (אחוז החסימה 3.25%). לפי ynet צריך להם עוד כ-52 אלף קולות, והסיכוי קטן אבל לא אפסי. עמך ישראל של וינטר, כ-1.6%, רחוקה מאוד.</p>
 <p>ספירת כל הקולות, כולל המעטפות הכפולות, צפויה להסתיים ביום חמישי אחר הצהריים או ערב (29.10 עד 30.10), והפרסום הרשמי הסופי של התוצאות צפוי ב-4 בנובמבר (<a href="https://www.timesofisrael.com/with-85-of-votes-counted-netanyahu-bloc-has-53-seats-eisenkots-48-arab-parties-surge-to-19/">Times of Israel</a>).</p>
