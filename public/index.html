@@ -208,6 +208,14 @@ footer a{color:var(--dim)}
   </div>
 </div>
 
+<!-- ============ CEC LIVE COUNT ============ -->
+<section id="cec" style="display:none">
+  <div class="sec-head"><span class="sec-num">&#128278;</span><h2>הספירה הרשמית — חלוקת מנדטים זמנית</h2><span class="sec-sub" id="cecSub"></span></div>
+  <div class="note" id="cecWarn" style="border-color:var(--gold);color:var(--txt)"></div>
+  <div class="chips" id="cecChips" style="margin-top:12px"></div>
+  <div class="note" id="cecMeta" style="margin-top:10px"></div>
+</section>
+
 <!-- ============ BLOCS ============ -->
 <section id="blocs">
   <div class="sec-head"><span class="sec-num">01</span><h2>איפה הגושים עומדים</h2><span class="sec-sub">ממוצע 7 הסקרים האחרונים (20–23.10) · 120 מנדטים</span></div>
@@ -437,6 +445,16 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
   var MCMAP=null, CURMIX='all';
 
   function fmtP(x){var p=x*100; return p>=1?Math.round(p)+'%':(p>=0.05?p.toFixed(1)+'%':'<0.1%');}
+
+  function renderCec(c){ if(!c||!c.seats)return;
+    var sec=document.getElementById('cec'); if(!sec)return; sec.style.display='block';
+    set('cecSub','נכון ל־'+c.as_of+' · '+(+c.valid).toLocaleString()+' קולות כשרים · '+(+c.ballots).toLocaleString()+' קלפיות · '+c.pct_of_eligible+'% מבעלי זכות הבחירה');
+    set('cecWarn','המרה חישובית (בדר־עופר עם הסכמי העודפים) של הספירה החלקית הרשמית — אינה תוצאות סופיות ואינה תחזית. אינה כוללת מעטפות כפולות, והחלוקה צפויה להשתנות ככל שהספירה מתקדמת.');
+    var ch=document.getElementById('cecChips');
+    ch.innerHTML=Object.keys(c.seats).filter(function(x){return c.seats[x]>0}).sort(function(a,b){return c.seats[b]-c.seats[a]}).map(function(x){return '<div class="chip">'+(c.heb[x]||x)+' <b>'+c.seats[x]+'</b></div>'}).join('');
+    var below=(c.below_threshold||[]).map(function(b){return b.name+' '+b.pct+'%'}).join(' · ');
+    document.getElementById('cecMeta').innerHTML='<b>גושים בהמרה זו:</b> ימין '+c.blocs.right+' · מרכז־שינוי '+c.blocs.center+' · ערביות '+c.blocs.arab+(c.blocs.other?' · אחר '+c.blocs.other:'')+(below?' · <b>מתחת לאחוז החסימה (3.25%):</b> '+below:'')+'<br>מקור: <a href="'+c.url+'" target="_blank" rel="noopener" style="color:var(--gold)">ועדת הבחירות המרכזית — תוצאות ארציות</a>. ההמרה: אותו קוד בדר־עופר של האתר (קוד פתוח ב־GitHub), רענון כל ~5 דקות.';
+  }
   function renderEp(ep){ if(!ep||!ep.all)return;
     var a=ep.all, no=100-a.p_any*100;
     var k=document.getElementById('heroKicker'); if(k)k.textContent=ep.headline;
@@ -537,6 +555,7 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
         renderMc(MCMAP[CURMIX]||MCMAP.all);
       }
       if(d.mc&&d.mc.ep)renderEp(d.mc.ep);
+      if(d.mc&&d.mc.cec)renderCec(d.mc.cec);
       if(d.benchmark){
         if(d.benchmark.coalitionMajority!=null)set('bmCoal',d.benchmark.coalitionMajority+'%');
         if(d.benchmark.hungParliament!=null)set('bmHung',d.benchmark.hungParliament+'%');

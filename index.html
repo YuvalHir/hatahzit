@@ -436,6 +436,10 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
   var MCMAP=null, CURMIX='all';
   function renderMc(m){ if(!m)return;
     var yes=Math.round(m.p_any_61*100), no=100-yes;
+    var yf=m.p_any_61*100, lo=Math.max(0,yf-3), hi=yf+3;
+    var pt=document.querySelector('.band .pt'); if(pt)pt.style.right=yf.toFixed(1)+'%';
+    var rg=document.querySelector('.band .rng'); if(rg){rg.style.right=lo.toFixed(1)+'%';rg.style.width=(hi-lo).toFixed(1)+'%';}
+    var bl=document.querySelector('.band .bl span:last-child'); if(bl)bl.textContent=Math.round(lo)+'% \u2013 '+Math.round(hi)+'%';
     set('pct',no+'%');
     var rv=document.getElementById('ringVal'); if(rv)rv.setAttribute('stroke-dashoffset',(540.35*(1-m.p_any_61)).toFixed(2));
     set('chipR','~'+Math.round(m.p_right_61*100)+'%');

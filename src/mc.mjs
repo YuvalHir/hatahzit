@@ -84,7 +84,7 @@ function randn() {
   return m * Math.cos(t);
 }
 
-function baderOfer(votes, pairs) {
+export function baderOfer(votes, pairs) {
   const total = Object.values(votes).reduce((a, b) => a + b, 0);
   const thresh = 0.0325 * total;
   const passed = PARTIES.filter(p => votes[p] >= thresh);

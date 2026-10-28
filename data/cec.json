@@ -1,0 +1,62 @@
+{
+ "as_of": "28/10/2026 05:57",
+ "updated_at": "2026-10-28T05:20:59.379Z",
+ "source": "ועדת הבחירות המרכזית — תוצאות ארציות (ספירה חלקית)",
+ "url": "https://votes26.bechirot.gov.il/nationalresults?lang=he",
+ "ballots": 5037,
+ "valid": 2122846,
+ "eligible": 7331981,
+ "pct_of_eligible": 29,
+ "seats": {
+  "likud": 28,
+  "shas": 7,
+  "yahadut": 8,
+  "tziyonut": 7,
+  "otzma": 7,
+  "noam": 0,
+  "winter": 0,
+  "yashar": 21,
+  "beyahad": 11,
+  "democratim": 7,
+  "beiteinu": 8,
+  "meshutefet": 12,
+  "raam": 4,
+  "miluim": 0,
+  "haredi": 0
+ },
+ "blocs": {
+  "right": 57,
+  "center": 47,
+  "arab": 16,
+  "other": 0
+ },
+ "below_threshold": [
+  {
+   "id": "miluim",
+   "name": "המילואימניקים",
+   "pct": 2.72
+  },
+  {
+   "id": "winter",
+   "name": "עמך ישראל",
+   "pct": 1.77
+  }
+ ],
+ "heb": {
+  "likud": "הליכוד",
+  "yashar": "ישר!",
+  "beyahad": "ביחד",
+  "democratim": "הדמוקרטים",
+  "meshutefet": "המשותפת",
+  "shas": "ש\"ס",
+  "yahadut": "יהדות התורה",
+  "tziyonut": "הציונות הדתית-זהות",
+  "otzma": "עוצמה יהודית",
+  "beiteinu": "ישראל ביתנו",
+  "raam": "רע\"ם",
+  "miluim": "המילואימניקים",
+  "winter": "עמך ישראל",
+  "noam": "נעם",
+  "haredi": "הציבור החרדי"
+ }
+}
