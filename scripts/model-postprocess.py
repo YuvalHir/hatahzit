@@ -60,6 +60,7 @@ MOBILE_CSS = '''
   table td::before{content:attr(data-label);display:block;font-size:12.5px;color:var(--dim);font-weight:600;margin-bottom:1px}
   table td.n{text-align:right;direction:rtl}
   .tw{overflow-x:visible}
+  details.more>table{width:auto}
   .ex-tab th,.ex-tab td{padding:3px 0;border:none}
   .ex-tab tr{border:1px solid #1f2a48;border-radius:10px;padding:10px 12px;margin:0 0 14px}
   .ex-tab tr:first-child{display:none}
