@@ -210,7 +210,7 @@ footer a{color:var(--dim)}
 
 <!-- ============ CEC LIVE COUNT ============ -->
 <section id="cec" style="display:none">
-  <div class="sec-head"><span class="sec-num">&#128278;</span><h2>הספירה הרשמית — חלוקת מנדטים זמנית</h2><span class="sec-sub" id="cecSub"></span></div>
+  <div class="sec-head"><span class="sec-num">&#128278;</span><h2>הספירה הרשמית — חלוקת המנדטים (הספירה הושלמה)</h2><span class="sec-sub" id="cecSub"></span></div>
   <div class="note" id="cecWarn" style="border-color:var(--gold);color:var(--txt)"></div>
   <div class="chips" id="cecChips" style="margin-top:12px"></div>
   <div class="note" id="cecMeta" style="margin-top:10px"></div>
@@ -449,12 +449,12 @@ document.getElementById('deepCta').addEventListener('click',toggleDeep);
 
   function renderCec(c){ if(!c||!c.seats)return;
     var sec=document.getElementById('cec'); if(!sec)return; sec.style.display='block';
-    set('cecSub','נכון ל־'+c.as_of+' · '+(+c.valid).toLocaleString()+' קולות כשרים · '+(+c.ballots).toLocaleString()+' קלפיות · '+c.pct_of_eligible+'% מבעלי זכות הבחירה');
-    set('cecWarn','המרה חישובית (בדר־עופר עם הסכמי העודפים) של הספירה החלקית הרשמית — אינה תוצאות סופיות ואינה תחזית. אינה כוללת מעטפות כפולות, והחלוקה צפויה להשתנות ככל שהספירה מתקדמת.');
+    set('cecSub','הספירה הושלמה · נכון ל־'+c.as_of+' · '+(+c.valid).toLocaleString()+' קולות כשרים · '+(+c.ballots).toLocaleString()+' קלפיות · '+c.pct_of_eligible+'% מבעלי זכות הבחירה');
+    set('cecWarn','הוועדה הודיעה על השלמת ספירת כל הקולות: 5,564,764 קולות כשרים מתוך 5,589,836 מצביעים. חלוקת המנדטים להלן היא המרה חישובית (בדר־עופר עם הסכמי העודפים) של נתוני הספירה באתר הוועדה, והיא זהה לחלוקה שהודיעה הוועדה. הפרסום הרשמי ברשומות צפוי עד 4.11.2026; אם יהיה שינוי, הדף יעודכן. שים לב לשני בסיסי מספור: אתר הוועדה מציג ספירה שוטפת של 5,690,778 כשרים (23:47), ואילו סיכום הוועדה הוא 5,564,764 כשרים מתוך 5,589,836 — ההפרש לא פורסם בפירוט, וחלוקת המנדטים זהה בשני הבסיסים.');
     var ch=document.getElementById('cecChips');
     ch.innerHTML=Object.keys(c.seats).filter(function(x){return c.seats[x]>0}).sort(function(a,b){return c.seats[b]-c.seats[a]}).map(function(x){return '<div class="chip">'+(c.heb[x]||x)+' <b>'+c.seats[x]+'</b></div>'}).join('');
     var below=(c.below_threshold||[]).map(function(b){return b.name+' '+b.pct+'%'}).join(' · ');
-    document.getElementById('cecMeta').innerHTML='<b>גושים בהמרה זו:</b> ימין '+c.blocs.right+' · מרכז־שינוי '+c.blocs.center+' · ערביות '+c.blocs.arab+(c.blocs.other?' · אחר '+c.blocs.other:'')+(below?' · <b>מתחת לאחוז החסימה (3.25%):</b> '+below:'')+'<br>מקור: <a href="'+c.url+'" target="_blank" rel="noopener" style="color:var(--gold)">ועדת הבחירות המרכזית — תוצאות ארציות</a>. ההמרה: אותו קוד בדר־עופר של האתר (קוד פתוח ב־GitHub), רענון כל ~5 דקות.';
+    document.getElementById('cecMeta').innerHTML='<b>גושים בהמרה זו:</b> ימין '+c.blocs.right+' · מרכז־שינוי '+c.blocs.center+' · ערביות '+c.blocs.arab+(c.blocs.other?' · אחר '+c.blocs.other:'')+(below?' · <b>מתחת לאחוז החסימה (3.25%):</b> '+below:'')+'<br>מקור: <a href="'+c.url+'" target="_blank" rel="noopener" style="color:var(--gold)">ועדת הבחירות המרכזית — תוצאות ארציות</a>. ההמרה: אותו קוד בדר־עופר של האתר (קוד פתוח ב־GitHub) — הספירה הושלמה; זהו העדכון האחרון של הוועדה.';
   }
   function renderEp(ep){ if(!ep||!ep.all)return;
     var a=ep.all, no=100-a.p_any*100;
