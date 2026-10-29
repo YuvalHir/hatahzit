@@ -94,3 +94,18 @@ a.top{display:block;text-align:left;font-size:13px;color:var(--faint);text-decor
 .ex-row{margin:12px 2px;padding-bottom:10px;border-bottom:1px solid #1f2a48}.ex-t{font-size:17px;line-height:1.4}.ex-bar{background:#1a2442;border-radius:6px;height:12px;margin:6px 0}.ex-bar i{display:block;height:100%;border-radius:6px;margin-inline-start:0}.ex-n{font-size:16px}
 .ex-tab{width:100%;border-collapse:collapse;font-size:14px}.ex-tab th,.ex-tab td{padding:6px;border-bottom:1px solid #1f2a48;text-align:right}
 .hm-back2{display:inline-block;margin:6px 0;padding:10px 14px;border:1px solid #3b4a77;border-radius:12px;color:#ffd166;text-decoration:none;font-weight:700}
+/* mobile: stack table rows as cards, no sideways scroll */
+@media(max-width:600px){
+  table{display:block;overflow-x:visible;font-size:15px}
+  table tr{display:block;margin:0 0 14px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02)}
+  table tr:first-child{display:none}
+  table td{display:block;border:none;padding:3px 0;text-align:right;white-space:normal}
+  table td::before{content:attr(data-label);display:block;font-size:12.5px;color:var(--dim);font-weight:600;margin-bottom:1px}
+  table td.n{text-align:right;direction:rtl}
+  .tw{overflow-x:visible}
+  .ex-tab th,.ex-tab td{padding:3px 0;border:none}
+  .ex-tab tr{border:1px solid #1f2a48;border-radius:10px;padding:10px 12px;margin:0 0 14px}
+  .ex-tab tr:first-child{display:none}
+  .ex-tab td{display:block;text-align:right}
+  .ex-tab td::before{content:attr(data-label);display:block;font-size:12.5px;color:var(--dim);font-weight:600;margin-bottom:1px}
+}
