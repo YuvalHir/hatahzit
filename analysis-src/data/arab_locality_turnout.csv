@@ -1,0 +1,24 @@
+# Arab-sector locality turnout, 2026 vs 2022
+# col2: ynet election-day figures as of 20:00 27/10/2026 (not final) https://www.ynet.co.il/news/elections2026/article/syyu4or2ze
+# col3: i24NEWS figures reported 29/10/2026 (later, closer to final) https://www.i24news.tv/he/news/israel-elections-2026/artc-3891403a
+# col4: 2022 final figures as cited by ynet
+locality,turnout_2026_ynet_20:00_pct,turnout_2026_i24_29oct_pct,turnout_2022_pct
+כפר קאסם,81.3,84.9,66.88
+סכנין,83.5,88.6,68.4
+רהט,79.8,82.0,60.6
+אום אל-פחם,70.1,,38.3
+נצרת,70.0,,48.3
+טייבה,74.3,,57.7
+שפרעם,72.5,,51.5
+חורה,76.3,,49.0
+טירה,77.5,,
+כסייפה,78.6,,
+ביר אל-מכסור,77.6,,
+תל שבע,73.0,,
+כפר אל-עריאן (ואדי ערה),90.7,,
+ביר הדאג' (פזורה),87.3,88.6,
+שבט אבו קרינאת,85.2,,
+קבועה,84.2,,
+ערערה בנגב,71.3,,
+דמיידה,87.9,,
+שיבלי-אום אל גאנם,74.3,,

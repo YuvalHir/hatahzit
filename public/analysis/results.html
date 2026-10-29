@@ -12,7 +12,7 @@
 <body>
 <div class="wrap">
 <header class="top"><a class="logo" href="/"><b>התחזית</b> · כנסת 26</a><span class="stamp">עודכן: 29.10.2026, לפנות בוקר (שעון ישראל)</span></header>
-<nav class="nav"><a href="./">סיכום</a><a href="results.html" class="on">מה קרה</a><a href="polls.html">הסקרים</a><a href="right.html">הימין</a><a href="opposition.html">האופוזיציה</a><a href="blocs.html">מעבר בין גושים</a><a href="issues.html">הבטחות וגיוס</a><a href="next.html">מה עכשיו</a><a href="qa.html">שאלות ותשובות</a><a href="judgment.html">מי צודק</a><a href="sources.html">מקורות</a></nav>
+<nav class="nav"><a href="./">סיכום</a><a href="results.html" class="on">מה קרה</a><a href="turnout.html">ההצבעה</a><a href="sectors.html">גוש נתניהו</a><a href="arab.html">המגזר הערבי</a><a href="opposition.html">האופוזיציה</a><a href="right.html">הימין</a><a href="polls.html">הסקרים</a><a href="blocs.html">מעבר בין גושים</a><a href="issues.html">הבטחות וגיוס</a><a href="next.html">מה עכשיו</a><a href="qa.html">שאלות ותשובות</a><a href="judgment.html">מי צודק</a><a href="sources.html">מקורות</a></nav>
 <div class="banner">הסקרים שלפני הבחירות פספסו את התוצאה ב-5 עד 7 מנדטים, ולכן אנחנו לא משתמשים בהם כראיה לתנועת מצביעים בין מפלגות וגושים או לפרופיל הבוחרים. נתוני סקרים מוצגים רק כ"מה נאמר לפני הבחירות", עם סימון. הראיות שלנו הן תוצאות בפועל (ספירה חלקית), אחוזי הצבעה וניתוחים של תוצאות לפי יישוב. תנועת מצביעים בפועל תתברר רק מסקר או מחקר אחרי הבחירות.<br>התוצאות עדיין אינן סופיות (נספרו כ-90% מהקולות; המעטפות הכפולות נספרות). כל מסקנה שתלויה בספירה הסופית מסומנת. </div>
 <main>
 <h1>מה קרה: המספרים</h1>
@@ -49,8 +49,8 @@ fetch('/api/data').then(r=>r.json()).then(d=>{
 <tr><td>ביחד (בנט ולפיד)</td><td>שינוי</td><td>12</td><td>9.02%</td></tr>
 <tr><td>הדמוקרטים (גולן)</td><td>שינוי</td><td>8</td><td>6.51%</td></tr>
 <tr><td>ישראל ביתנו</td><td>שינוי</td><td>7</td><td>5.94%</td></tr>
-<tr><td>הרשימה המשותפת</td><td>ערבי</td><td>12</td><td>9.19%</td></tr>
-<tr><td>רע"ם</td><td>ערבי</td><td>7</td><td>6.02%</td></tr>
+<tr><td>הרשימה המשותפת</td><td>ערבי</td><td>11</td><td>9.19%</td></tr>
+<tr><td>רע"ם</td><td>ערבי</td><td>8</td><td>6.02%</td></tr>
 <tr><td>המילואימניקים (הנדל, זליכה)</td><td>מתחת לאחוז החסימה</td><td>0</td><td>2.63%</td></tr>
 <tr><td>עמך ישראל (וינטר)</td><td>מתחת לאחוז החסימה</td><td>0</td><td>1.60%</td></tr>
 </table>
@@ -95,7 +95,7 @@ fetch('/api/data').then(r=>r.json()).then(d=>{
 <p>מי "ניצח" תלוי במי שמגדיר. זה בדיוק מה ש-<a href="https://www.jpost.com/israel-election-2026/article-913137">הרלד קינן ב-Jerusalem Post</a> תיאר: נתניהו אמר שיש "רוב מוחלט לגוש הימין בקרב הציבור הציוני והיהודי", בנט ואיזנקוט אמרו ש"הברית של המשרתים ניצחה את ברית המשתמטים", ויאיר גולן ספר את המפלגות הערביות בצד של אופוזיציה כדי להגיד שהרוב הדמוקרטי ניצח. אלה הגדרות שונות של "מי נחשב", לא נתונים שונים.</p>
 
 </main>
-<div class="pager"><a class="prev" href="./">→ סיכום</a><a class="next" href="polls.html">הסקרים ←</a></div>
+<div class="pager"><a class="prev" href="./">→ סיכום</a><a class="next" href="turnout.html">ההצבעה ←</a></div>
 <footer>
 <p><b>איך לקרוא את הדף הזה:</b> כל נתון מסומן לפי סוגו: <span class="t off">רשמי</span> ועדת הבחירות או מקור ממשלתי, <span class="t med">תקשורת</span> דיווח של כלי תקשורת או מכון סקרים, <span class="t calc">חישוב שלנו</span> חישוב שמבוסס על נתונים פומביים ואפשר לבדוק אותו, <span class="t op">דעה</span> עמדה של פרשן או מחבר, <span class="t jud">הערכה שלנו</span> שיפוט שלנו, שאינו עובדה.</p>
 <p>זה ניתוח עצמאי ולא סקר, לא תעמולה ולא ייעוץ. הוא נכתב כך שגם מי שמצביע לגוש הימין וגם מי שמצביע לגוש השינוי יוכלו לבדוק כל טענה במקור שלה. <a href="sources.html">רשימת המקורות המלאה</a>.</p>

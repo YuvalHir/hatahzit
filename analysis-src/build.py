@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """Builds static analysis pages: analysis-src/*.html fragments -> public/analysis/*.html"""
-import os, re, html
+import os, re, html, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import charts
+charts.make()
 SRC = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(SRC, '..', 'public', 'analysis')
 STAMP = open(os.path.join(SRC, 'STAMP.txt'), encoding='utf-8').read().strip()
 PAGES = [
  ('index', 'סיכום', 'הניתוח: מה קרה בבחירות 26'),
  ('results', 'מה קרה', 'מה קרה: המספרים'),
- ('polls', 'הסקרים', 'למה הסקרים טעו (ומי לא)'),
- ('right', 'הימין', 'הליכוד, נתניהו וגוש הימין'),
+ ('turnout', 'ההצבעה', 'ההצבעה: מי יצא ומה זה שינה'),
+ ('sectors', 'גוש נתניהו', 'גוש נתניהו בנתונים: ליכוד, ש"ס, חרדים והפריפריה'),
+ ('arab', 'המגזר הערבי', 'המגזר הערבי: שיא ההצבעה והמנדטים'),
  ('opposition', 'האופוזיציה', 'איזנקוט וגוש השינוי'),
+ ('right', 'הימין', 'הליכוד, נתניהו וגוש הימין'),
+ ('polls', 'הסקרים', 'למה הסקרים טעו (ומי לא)'),
  ('blocs', 'מעבר בין גושים', 'האם אפשר לשכנע לעבור גוש? מה אומר המחקר'),
  ('issues', 'הבטחות וגיוס', 'הבטחות בחירות וגיוס החרדים'),
  ('next', 'מה עכשיו', 'מה עכשיו: תרחישים, בחירות חוזרות, 61'),
@@ -51,6 +57,7 @@ def build():
     stampshort = ''
     for i, (slug, label, h1) in enumerate(PAGES):
         frag = open(os.path.join(SRC, slug + '.html'), encoding='utf-8').read()
+        for k, v in charts.CHARTS.items(): frag = frag.replace('<!--CHART:%s-->' % k, v)
         nav = ''.join('<a href="%s"%s>%s</a>' % ('./' if s == 'index' else s + '.html', ' class="on"' if s == slug else '', l) for s, l, _ in PAGES)
         pager = ''
         if i > 0:
