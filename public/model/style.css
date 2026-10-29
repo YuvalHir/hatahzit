@@ -98,6 +98,7 @@ a.top{display:block;text-align:left;font-size:13px;color:var(--faint);text-decor
 /* mobile: stack table rows as cards, no sideways scroll */
 @media(max-width:600px){
   table{display:block;overflow-x:visible;font-size:15px}
+  table tbody,table thead{display:block}
   table tr{display:block;margin:0 0 14px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02)}
   table tr:first-child{display:none}
   table td{display:block;border:none;padding:3px 0;text-align:right;white-space:normal}
